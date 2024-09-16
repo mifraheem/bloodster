@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for chat UI */
+        .chat-container {
+            height: 90vh;
+            display: flex;
+            overflow: hidden;
+        }
+        .user-list {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .user-list .list-group-item {
+            cursor: pointer;
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #f8f9fa;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #e9ecef;
+        }
+        .message {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            margin-bottom: 10px;
+            clear: both;
+        }
+        .sent {
+            background-color: #0d6efd;
+            color: white;
+            float: right;
+            text-align: right;
+        }
+        .received {
+            background-color: #f1f1f1;
+            float: left;
+            text-align: left;
+        }
+        .chat-input {
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        .chat-input textarea {
+            resize: none;
+            width: 100%;
+            height: 50px;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid chat-container">
+    <!-- Left side: Users list -->
+    <div class="col-4 p-3 bg-white user-list border-end">
+        <h5 class="mb-3">Users</h5>
+        <ul class="list-group">
+            <li class="list-group-item">User 1</li>
+            <li class="list-group-item">User 2</li>
+            <li class="list-group-item">User 3</li>
+            <!-- More users can be listed here -->
+        </ul>
+    </div>
+
+    <!-- Right side: Chat box -->
+    <div class="col-8 p-3 chat-box">
+        <div class="chat-header mb-3">
+            <h5>Chat with User 1</h5>
+        </div>
+
+        <div class="chat-messages">
+            <!-- Sample messages -->
+            <div class="message received">
+                Hello, how are you?
+            </div>
+            <div class="message sent">
+                I'm good, thank you! How about you?
+            </div>
+            <div class="message received">
+                I'm fine as well. What's up?
+            </div>
+            <!-- Add more messages here dynamically -->
+        </div>
+
+        <div class="chat-input">
+            <form method="post">
+                <div class="input-group">
+                    <textarea class="form-control" placeholder="Type your message..."></textarea>
+                    <button class="btn btn-primary" type="submit">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS (for optional JavaScript components) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

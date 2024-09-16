@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from website.controllers import basic_controller, user_controller, dashboards, bloodRequest
+from website.controllers import basic_controller, user_controller, dashboards, bloodRequest, chat_controller
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -40,5 +40,9 @@ urlpatterns = [
 
 
     # profile urls
-    path('donor/<int:id>', dashboards.show_donor_profile, name='donor-profile')
+    path('donor/<int:id>', dashboards.show_donor_profile, name='donor-profile'),
+
+
+    # chat urls
+    path('chat/', chat_controller.chat, name='chat')
 ]
