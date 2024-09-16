@@ -89,6 +89,18 @@
         <h1>Welcome, Recipient Name</h1>
         <p>We're here to help you find the blood you need.</p>
     </header>
+    {% if messages %}
+    <div class="d-flex justify-content-center">
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
 
     <!-- Main Content -->
     <div class="container mt-5">
@@ -259,13 +271,18 @@
                     <td>{{ request.request_date|date:"d M Y" }}</td>
                     <td>{{ request.requested_blood_group }}</td>
                     <td>{{ request.urgency }}</td>
-                    <td>
-                        {% if request.fulfilled %}
-                            <span class="badge bg-success">Fulfilled</span>
-                        {% else %}
-                            <span class="badge bg-warning">Pending</span>
-                        {% endif %}
-                    </td>
+                    {% if request.status == 'fulfilled' %}
+                    <td> <span class="badge bg-success text-uppercase">{{ request.status }}</span></td>
+                    {% endif %}
+                    {% if request.status == 'in_progress' %}
+                    <td> <span class="badge bg-info text-uppercase">{{ request.status }}</span></td>
+                    {% endif %}
+                    {% if request.status == 'cancelled' %}
+                    <td> <span class="badge bg-danger text-uppercase">{{ request.status }}</span></td>
+                    {% endif %}
+                    {% if request.status == 'pending' %}
+                    <td> <span class="badge bg-warning text-uppercase">{{ request.status }}</span></td>
+                    {% endif %}
                     <td>
                         <a href="{% url 'view-request' request.id %}" class="btn btn-sm btn-secondary">View</a>
                         <a href="{% url 'cancel-request' request.id %}" class="btn btn-sm btn-danger">Cancel</a>
@@ -274,6 +291,53 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Donation Confirmation -->
+<div class="card mb-4">
+    <div class="card-header">
+        Confirm Donations
+    </div>
+    <div class="card-body">
+        {% if donations_confirmation %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Donation Date</th>
+                    <th>Donor</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations_confirmation %}
+                <tr>
+                    <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
+                    <td>{{ donation.donor.username }}</td>
+                    <td>{{ donation.location }}</td>
+                    {% if donation.is_verified %}
+                    <td> <span class="badge bg-success text-uppercase">Verified</span></td>
+                    {% else %}
+                    <td> <span class="badge bg-warning text-uppercase">Pending Verification</span></td>
+                    {% endif %}
+                    <td>
+                        {% if not donation.is_verified %}
+
+                        <a href="{% url 'reject-donation' donation.id %}" class="btn btn-sm btn-danger">Reject</a>
+
+                        <a href="{% url 'verify-donation' donation.id %}" class="btn btn-sm btn-success">Verify</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Confirmation request found.</p>
+        {% endif %}
+
     </div>
 </div>
 

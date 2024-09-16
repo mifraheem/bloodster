@@ -27,7 +27,38 @@ class User(AbstractUser):
         return self.username
 
 
-# Model for Blood Donation History
+class BloodRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('fulfilled', 'Fulfilled'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    recipient = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='blood_requests', limit_choices_to={'user_type': 'recipient'}
+    )
+    requested_blood_group = models.CharField(max_length=3)
+    request_date = models.DateTimeField(default=timezone.now)
+    urgency = models.CharField(
+        max_length=20, choices=[('Immediate', 'Immediate'), ('24 hours', 'Within 24 hours'), ('3 days', 'Within 3 days'), ('7 days', 'Within 7 days')]
+    )
+    location = models.CharField(max_length=255)
+    additional_info = models.TextField(blank=True, null=True)
+
+    status = models.CharField(
+        max_length=15, choices=STATUS_CHOICES, default='pending'
+    )
+
+    fulfilled_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name='fulfilled_requests'
+    )
+
+    def __str__(self):
+        return f"Blood request by {self.recipient.username} for {self.requested_blood_group} at {self.location}"
+
+
 class BloodDonation(models.Model):
     donor = models.ForeignKey(User, on_delete=models.CASCADE,
                               related_name='donations', limit_choices_to={'user_type': 'donor'})
@@ -35,6 +66,11 @@ class BloodDonation(models.Model):
     location = models.CharField(max_length=255)
     recipient = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
                                   blank=True, related_name='received_blood')
+    is_verified = models.BooleanField(
+        default=False)
+
+    blood_request = models.OneToOneField(
+        BloodRequest, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f"Donation by {self.donor.username} on {self.date_of_donation}"
@@ -47,38 +83,11 @@ class BloodDonation(models.Model):
         last_donation = BloodDonation.objects.filter(
             donor=donor).order_by('-date_of_donation').first()
         if last_donation:
-            # Calculate the time difference between now and the last donation
             time_since_last_donation = timezone.now() - last_donation.date_of_donation
-            # Check if it's been more than 3 months
             return time_since_last_donation >= timedelta(days=90)
-        return True  # If no previous donation exists, donor can donate
+        return True
 
 
-class BloodRequest(models.Model):
-    recipient = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        related_name='blood_requests', limit_choices_to={'user_type': 'recipient'}
-    )
-    requested_blood_group = models.CharField(
-        max_length=3)
-    request_date = models.DateTimeField(default=timezone.now)
-
-    urgency = models.CharField(
-        max_length=20, choices=[('Immediate', 'Immediate'), ('24 hours', 'Within 24 hours'), ('3 days', 'Within 3 days'), ('7 days', 'Within 7 days')]
-    )
-    location = models.CharField(max_length=255)
-    additional_info = models.TextField(blank=True, null=True)
-
-    fulfilled = models.BooleanField(default=False)
-    fulfilled_by = models.ForeignKey(User, on_delete=models.SET_NULL,
-                                     null=True, blank=True, related_name='fulfilled_requests'
-                                     )
-
-    def __str__(self):
-        return f"Blood request by {self.recipient.username} for {self.requested_blood_group} at {self.location}"
-
-
-# Model for managing donor badges and stars
 class Badge(models.Model):
     # e.g., '5 Donations', 'Life Saver'
     name = models.CharField(max_length=100)
@@ -91,7 +100,6 @@ class Badge(models.Model):
         return self.name
 
 
-# Model for direct messaging between donors and recipients
 class Message(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -105,11 +113,10 @@ class Message(models.Model):
         return f"Message from {self.sender.username} to {self.receiver.username} on {self.timestamp}"
 
 
-# Model for managing blood inventory
 class BloodInventory(models.Model):
     blood_group = models.CharField(max_length=3)
     available_units = models.PositiveIntegerField(
-        default=0)  # Number of units available
+        default=0)
     last_updated = models.DateTimeField(auto_now=True)
     hospital_location = models.CharField(max_length=255)
 
@@ -117,7 +124,6 @@ class BloodInventory(models.Model):
         return f"{self.blood_group} - {self.available_units} units"
 
 
-# Model for Campaigns (Blood drives, donation events)
 class Campaign(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)

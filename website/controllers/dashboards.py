@@ -11,9 +11,19 @@ def donor_dashboard(request):
         messages.error(
             request, "You're not allowed to visit donor Dashboard")
         return redirect('home')
+
     matching_requests = find_matching_requests(request.user)
+    all_requests = BloodRequest.objects.filter(status='pending')
+    accepted_requests = BloodRequest.objects.filter(
+        fulfilled_by=request.user, status='in_progress')
+    donations = BloodDonation.objects.filter(
+        donor=request.user)
+    print(donations)
     context = {
-        "matching_requests": matching_requests
+        "matching_requests": matching_requests,
+        "all_requests": all_requests,
+        "accepted_requests": accepted_requests,
+        "donations": donations
     }
     return render(request, 'db/donor.html', context)
 
@@ -35,11 +45,15 @@ def recipt_dashboard(request):
     all_donors = User.objects.filter(user_type='donor').exclude(
         id__in=[donor.id for donor in matching_donors])
 
+    donations_to_confirm = BloodDonation.objects.filter(
+        recipient=request.user, is_verified=False)
+
     context = {
         'requests': blood_requests,
 
         'matching_donors': matching_donors,
-        'all_donors': all_donors  # Donors not matched based on location
+        'all_donors': all_donors,
+        'donations_confirmation': donations_to_confirm
     }
 
     return render(request, 'db/recipient.html', context)

@@ -46,7 +46,7 @@ def find_matching_requests(donor):
     Find matching blood requests based on the donor's location.
     """
     # Get all blood requests
-    all_requests = BloodRequest.objects.all()
+    all_requests = BloodRequest.objects.filter(status='pending')
 
     # List to store matching requests
     matching_requests = []
@@ -75,7 +75,8 @@ def find_matching_donors_for_all_requests(recipient):
     and return only those with a location similarity ratio >= 0.3.
     """
     # Get all blood requests for the recipient
-    recipient_requests = BloodRequest.objects.filter(recipient=recipient)
+    recipient_requests = BloodRequest.objects.filter(
+        recipient=recipient, status='pending')
 
     # Set to store unique matching donors
     matching_donors = set()

@@ -28,6 +28,14 @@ urlpatterns = [
     path('cancel-request/<int:id>',
          bloodRequest.cancel_request, name='cancel-request'),
     path('view-request/<int:id>', bloodRequest.view_request, name='view-request'),
+    path('accept-request/<int:request_id>/',
+         bloodRequest.accept_blood_request, name='accept_blood_request'),
+    path('fulfill-request/<int:request_id>',
+         bloodRequest.fulfill_request, name="fulfill-request"),
+    path('verify-donation/<int:id>',
+         bloodRequest.confirm_donation_by_recipient, name='verify-donation'),
+    path('reject-donation/<int:id>',
+         bloodRequest.reject_donation_by_recipient, name='reject-donation'),
 
 
 

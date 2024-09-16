@@ -110,8 +110,8 @@
                         Profile Summary
                     </div>
                     <div class="card-body">
-                        <p><strong>Blood Type:</strong> A+</p>
-                        <p><strong>Location:</strong> City Name</p>
+                        <p><strong>Blood Type:</strong> {{user.blood_group}} </p>
+                        <p><strong>Location:</strong> {{user.location}}</p>
                         <p><strong>Total Donations:</strong> 5</p>
                         <p><strong>Stars:</strong> ⭐⭐⭐⭐☆</p>
                         <p><strong>Badges:</strong></p>
@@ -136,59 +136,131 @@
             </div>
         </div>
 
-        <!-- Donation History -->
-        <div class="card mb-4">
-            <div class="card-header">
-                Donation History
-            </div>
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Location</th>
-                            <th>Recipient</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>01 Jan 2023</td>
-                            <td>City Hospital</td>
-                            <td>Recipient Name</td>
-                        </tr>
-                        <tr>
-                            <td>15 Mar 2023</td>
-                            <td>Community Clinic</td>
-                            <td>Recipient Name</td>
-                        </tr>
-                        <!-- Add more donation records as needed -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <!-- Donation History -->
+<div class="card mb-4">
+    <div class="card-header">
+        Donation History
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Recipient</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations %}
+                <tr>
+                    <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
+                    <td>{{ donation.location }}</td>
+                    <td>{{ donation.recipient.username }}</td>
+                    <td>{{ donation.is_verified|yesno:"Verified,Pending Verification" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No donation records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        <!-- Current Blood Requests -->
-        <div class="card mb-4">
-            <div class="card-header">
-                Current Blood Requests Matching Your Blood Type
+<!-- Current Blood Requests Matching Your Blood Type -->
+<div class="card mb-4">
+    <div class="card-header">
+        Your Accepted Blood Requests
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            {% for request in accepted_requests %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>{{ request.recipient.username }}</h5>
+                    <p>Blood Type: {{ request.requested_blood_group }}</p>
+                    <p>Location: {{ request.location }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'fulfill-request' request.id %}" class="btn btn-success">Fulfill Request</a>
+                    <a href="#" class="btn btn-secondary">Cancel</a>
+                </div>
             </div>
-            <div class="card-body">
+            {% empty %}
+            <p class="text-center">You haven't accepted any new Blood Request.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Current Blood Requests Matching Your Blood Type -->
+<div class="card mb-4">
+    <div class="card-header">
+        Current Blood Requests Matching Your Blood Type
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            {% for request in matching_requests %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>{{ request.recipient.username }}</h5>
+                    <p>Blood Type: {{ request.requested_blood_group }}</p>
+                    <p>Location: {{ request.location }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
+                    <a href="#" class="btn btn-secondary">Decline</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center">No matching blood requests at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Button to Show All Requests in a Modal -->
+<div class="text-center mt-4">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#allRequestsModal">
+        Show All Requests
+    </button>
+</div>
+
+<!-- Modal for All Requests -->
+<div class="modal fade" id="allRequestsModal" tabindex="-1" aria-labelledby="allRequestsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="allRequestsModalLabel">All Blood Requests</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <div class="list-group">
+                    {% for request in all_requests %}
                     <div class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <h5>Recipient Name</h5>
-                            <p>Blood Type: A+</p>
-                            <p>Location: Nearby City</p>
+                            <h5>{{ request.recipient.username }}</h5>
+                            <p>Blood Type: {{ request.requested_blood_group }}</p>
+                            <p>Location: {{ request.location }}</p>
                         </div>
                         <div>
-                            <a href="#" class="btn btn-success">Accept Request</a>
+                            <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
                             <a href="#" class="btn btn-secondary">Decline</a>
                         </div>
                     </div>
-                    <!-- Add more requests as needed -->
+                    {% empty %}
+                    <p class="text-center">No blood requests available.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
         <!-- Notifications & Messages -->
         <div class="row">
