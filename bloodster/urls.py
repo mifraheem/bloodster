@@ -1,0 +1,36 @@
+
+from django.contrib import admin
+from django.urls import path
+from website.controllers import basic_controller, user_controller, dashboards, bloodRequest
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    # basic urls
+    path('', basic_controller.home, name="home"),
+    path('about/', basic_controller.about),
+
+
+
+    # user urls
+    path('register/', user_controller.register, name='register'),
+    path('login/', user_controller.handle_login, name='login'),
+    path('logout/', user_controller.handle_logout, name='logout'),
+    path('update_profile/', user_controller.update_profile, name="update_profile"),
+
+    # dashboard urls
+    path('donor-dashboard/', dashboards.donor_dashboard, name='donor-dashboard'),
+    path('recip-dashboard/', dashboards.recipt_dashboard,
+         name='recipient-dashboard'),
+
+
+    # Blood request urls
+    path('blood-request/', bloodRequest.create_blood_request, name='blood-request'),
+    path('cancel-request/<int:id>',
+         bloodRequest.cancel_request, name='cancel-request'),
+    path('view-request/<int:id>', bloodRequest.view_request, name='view-request'),
+
+
+
+    # profile urls
+    path('donor/<int:id>', dashboards.show_donor_profile, name='donor-profile')
+]
