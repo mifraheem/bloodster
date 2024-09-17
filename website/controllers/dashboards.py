@@ -18,7 +18,7 @@ def donor_dashboard(request):
         fulfilled_by=request.user, status='in_progress')
     donations = BloodDonation.objects.filter(
         donor=request.user)
-    print(donations)
+
     context = {
         "matching_requests": matching_requests,
         "all_requests": all_requests,
