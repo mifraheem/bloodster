@@ -44,5 +44,10 @@ urlpatterns = [
 
 
     # chat urls
-    path('chat/', chat_controller.chat, name='chat')
+    path('chat/', chat_controller.chat, name='chat'),
+    path('chat/<str:chat_user>', chat_controller.chat, name='chat_user'),
+    path('save_message/<str:chat_user>',
+         chat_controller.save_message, name='save_message'),
+    path('fetch_all_messages/<str:chat_user>/',
+         chat_controller.fetch_all_messages, name='fetch_all_messages'),
 ]
