@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>About page</h1>
-{% if flash_message %}
-<div class="alert alert-{{ flash_message.category }}" role="alert">
-    {{ flash_message.message }}
-</div>
-{% endif %}
-{% endblock content %}

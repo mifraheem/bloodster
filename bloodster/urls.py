@@ -7,7 +7,6 @@ urlpatterns = [
 
     # basic urls
     path('', basic_controller.home, name="home"),
-    path('about/', basic_controller.about),
 
 
 
