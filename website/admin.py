@@ -63,3 +63,5 @@ class CampaignAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'location')
     search_fields = ('title', 'location')
     date_hierarchy = 'date'
+
+admin.site.register(Gallery)

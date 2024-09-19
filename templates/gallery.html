@@ -1,0 +1,23 @@
+{% extends "base1.html" %}
+{% block title %}Home{% endblock title %}
+{% load static %}
+{% block content %}
+<div class="container mb-5">
+    <div class="row session-title">
+        <h2>Full Gallery</h2>
+        <p class="text-center">
+            Welcome to our complete gallery! Here, you'll find a collection of moments that capture the essence of our work, events, and initiatives. Scroll through to see all of the images we’ve shared. We hope these snapshots give you a glimpse into the heart of what we do.
+        </p>
+    </div>
+    <div class="gallery-row row">
+        <div id="gg-screen"></div>
+        <div class="gg-box w-100">
+            {% for image in all_images %}
+            <div class="gg-element">
+                <img src="{{ image.image.url }}" alt="Gallery Image">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content%}

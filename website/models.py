@@ -129,6 +129,15 @@ class Campaign(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField()
     location = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='campaign_images/', blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+
+
+class Gallery(models.Model):
+    image = models.ImageField(upload_to='gallery/')  # Image upload field
+
+    def __str__(self):
+        return f"Image {self.id}"  # This returns the image ID when converted to string

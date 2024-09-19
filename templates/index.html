@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
 {% block title %}Home{% endblock title %}
 {% load static %}
 {% block content %}
@@ -24,7 +24,7 @@
 
                         <div class=" vbh">
 
-                            <div class="btn btn-success  bounceInUp"> Book Appointment </div>
+                            <div class="btn btn-success  bounceInUp"> About Us </div>
                             <div class="btn btn-success  bounceInUp"> Contact US </div>
                         </div>
                     </div>
@@ -86,50 +86,28 @@
     
       <!-- ################# Gallery Start Here #######################--->
      
-    <div id="gallery" class="gallery container-fluid">
+    <div id="gallery" class="gallery container-fluid ">
         <div class="container">
             <div class="row session-title">
                 <h2>Checkout Our Gallery</h2>
             </div>
-            <div class="gallery-row row">
-                    <div id="gg-screen"></div>
-                    <div class="gg-box">
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g1.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g2.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g3.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g4.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g5.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g6.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g7.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g8.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g9.jpg' %}">
-                            </div>
-                            <div class="gg-element">
-                                <img src="{% static 'assets/images/gallery/g10.jp' %}g">
-                            </div>
-                            
-                            
-                          </div>
+            <div class="gallery-row row ">
+                <div id="gg-screen"></div>
+                <div class="gg-box w-100">
+                    {% for image in gallery_images %}
+                    <div class="gg-element">
+                        <img src="{{ image.image.url }}" alt="Gallery Image">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="{% url 'full_gallery' %}">
+                    <div class="btn btn-success bounceInUp mt-4 px-5">See More</div>
+                </a>
             </div>
         </div>
-    </div>
+        
     
     
     
@@ -147,7 +125,7 @@
                      <img src="{% static 'assets/images/gallery/g1.jpg' %}" alt="">
                      <h4><b>1 - </b>Registration</h4>
                      <p>Join our community and become part of the change. Register now to stay updated on our latest initiatives and events.</p>
-                     <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button>
+                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
                      </div>
                  </div>
                  <div class="col-md-3 col-sm-6 vd">
@@ -155,7 +133,7 @@
                      <img src="{% static 'assets/images/gallery/g2.jpg' %}" alt="">
                         <h4><b>2 - </b>Seeing</h4>
                      <p>Experience the impact of your contributions firsthand. By getting involved, you’ll see the positive changes you're </p>
-                     <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button>
+                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
                      </div>
                  </div>
                  <div class="col-md-3 col-sm-6 vd">
@@ -163,7 +141,7 @@
                      <img src="{% static 'assets/images/gallery/g3.jpg' %}" alt="">
                         <h4><b>3 - </b>Donation</h4>
                      <p>Your donations make a real difference. Every contribution, no matter how big or small, helps support our mission </p>
-                     <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button>
+                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
                      </div>
                  </div>
                  <div class="col-md-3 col-sm-6 vd">
@@ -171,7 +149,7 @@
                         <img src="{% static 'assets/images/gallery/g4.jpg' %}" alt="">
                         <h4><b>4 - </b>Save Life</h4>
                          <p>By donating, you become a hero to someone in need. Your generosity can give someone a second chance at life. </p>
-                         <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button>
+                         {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
                     </div> 
                  </div>
             </div>
@@ -184,80 +162,45 @@
      
      
          <!--################### Our Blog Starts Here #######################--->
-        <div id="blog" class="blog-container contaienr-fluid">
+         <div id="campaigns" class="blog-container container-fluid">
             <div class="container">
                 <div class="session-title row">
-                  <h2>Latest Blog</h2>
-                  <p>Stay informed with the latest updates and insights. Our blog covers a range of topics to keep you engaged and inspired. </p>
+                    <h2>Latest Campaigns</h2>
+                    <p>Stay informed with the latest updates and insights. Our campaigns will keep you engaged and inspired.</p>
                 </div>
                 <div class="row news-row">
-                    <div class="col-md-6">
-                        <div class="news-card">
-                            <div class="image">
-                                <img src="{% static 'assets/images/blog/blog_01.jpg' %}" alt="">
+                    {% for campaign in latest_campaigns %}
+                    <div class="col-md-6 h-50">
+                        <div class="news-card ">
+                            <div class="image mt-2">
+                                {% if campaign.image %}
+                                    <img src="{{ campaign.image.url }}" alt="{{ campaign.title }}">
+                                {% else %}
+                                    <img src="{% static 'assets/images/blog/default_image.jpg' %}" alt="No Image Available">
+                                {% endif %}
                             </div>
                             <div class="detail">
-                                <h3>Latest News about Smarteye</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla vel nisl a dictum. Donec ut est arcu. Donec hendrerit consectetur adipiscing elit. </p>
+                                <h3>{{ campaign.title }}</h3>
+                                <p>{{ campaign.description|truncatewords:30 }}</p>
                                 <p class="footp">
-                                    27 Comments <span>/</span>
-                                    Blog Design <span>/</span>
-                                    Read More
+                                    {{ campaign.date }} <span>/</span>
+                                    {{ campaign.location }} <span>/</span>
+                                    <a href="{% url 'campaign_list' %}">Read More</a>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="news-card">
-                            <div class="image">
-                                <img src="{% static 'assets/images/blog/blog_02.jpg' %}" alt="">
-                            </div>
-                            <div class="detail">
-                                <h3>Apple Launch its New Phone</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla vel nisl a dictum. Donec ut est arcu. Donec hendrerit consectetur adipiscing elit. </p>
-                                <p class="footp">
-                                    27 Comments <span>/</span>
-                                    Blog Design <span>/</span>
-                                    Read More
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="news-card">
-                            <div class="image">
-                                <img src="{% static 'assets/images/blog/blog_03.jpg' %}" alt="">
-                            </div>
-                            <div class="detail">
-                                <h3>About Windows 10 Update</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla vel nisl a dictum. Donec ut est arcu. Donec hendrerit consectetur adipiscing elit. </p>
-                                <p class="footp">
-                                    27 Comments <span>/</span>
-                                    Blog Design <span>/</span>
-                                    Read More
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="news-card">
-                            <div class="image">
-                                <img src="{% static 'assets/images/blog/blog_04.jpg' %}" alt="">
-                            </div>
-                            <div class="detail">
-                                <h3>Latest News about Smarteye</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla vel nisl a dictum. Donec ut est arcu. Donec hendrerit consectetur adipiscing elit. </p>
-                                <p class="footp">
-                                    27 Comments <span>/</span>
-                                    Blog Design <span>/</span>
-                                    Read More
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'campaign_list' %}">
+                        <div class="btn btn-success bounceInUp mt-4 px-5">View All</div>
+                    </a>
                 </div>
             </div>
         </div>
+        
+        
 
      
      

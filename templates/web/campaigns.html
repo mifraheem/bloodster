@@ -1,0 +1,38 @@
+{% extends "base1.html" %}
+{% block title %}Home{% endblock title %}
+{% load static %}
+{% block content %}
+<div id="campaigns" class="blog-container container-fluid">
+    <div class="container">
+        <div class="session-title row">
+            <h2>All Campaigns</h2>
+            <p>Explore all our campaigns and stay updated on the latest events and initiatives.</p>
+        </div>
+        <div class="row news-row">
+            {% for campaign in campaigns %}
+            <div class="col-md-6">
+                <div class="news-card">
+                    <div class="image">
+                        {% if campaign.image %}
+                            <img src="{{ campaign.image.url }}" alt="{{ campaign.title }}">
+                        {% else %}
+                            <img src="{% static 'assets/images/blog/default_image.jpg' %}" alt="No Image Available">
+                        {% endif %}
+                    </div>
+                    <div class="detail">
+                        <h3>{{ campaign.title }}</h3>
+                        <p>{{ campaign.description|truncatewords:30 }}</p>
+                        <p class="footp">
+                            {{ campaign.date }} <span>/</span>
+                            {{ campaign.location }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
