@@ -3,23 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipient Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #eef2f5;
+            font-family: 'Arial', sans-serif;
         }
 
         .dashboard-header {
             background-color: #198754;
             color: white;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
+            border-bottom: 5px solid #157347;
         }
 
         .card {
             border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .card-header {
@@ -27,6 +32,8 @@
             color: white;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            text-align: center;
+            font-weight: bold;
         }
 
         .navbar-brand {
@@ -39,6 +46,38 @@
 
         .nav-link:hover {
             color: #ffc107 !important;
+        }
+
+        .btn-custom {
+            background-color: #198754;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #157347;
+        }
+
+        .badge-custom {
+            background-color: #ffc107;
+            color: black;
+            margin-right: 5px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .alert {
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -68,7 +107,7 @@
                         <a class="nav-link" href="#">Available Donors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url "chat" %}">Messages</a>
+                        <a class="nav-link" href="{% url 'chat' %}">Messages</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Notifications</a>
@@ -89,18 +128,22 @@
         <h1>Welcome, Recipient Name</h1>
         <p>We're here to help you find the blood you need.</p>
     </header>
+
+    <!-- Alert Messages -->
     {% if messages %}
-    <div class="d-flex justify-content-center">
-        <div class="alert-container">
-            {% for message in messages %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
-{% endif %}
+    {% endif %}
 
     <!-- Main Content -->
     <div class="container mt-5">
@@ -108,7 +151,7 @@
         <!-- Profile Summary & Request Blood -->
         <div class="row mb-4">
             <!-- Profile Summary -->
-            <div class="col-md-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card text-center">
                     <div class="card-header">
                         Profile Summary
@@ -122,7 +165,7 @@
             </div>
 
             <!-- Request Blood -->
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
                         Request Blood
@@ -130,12 +173,9 @@
                     <div class="card-body">
                         <form method="POST" action="{% url 'blood-request' %}">
                             {% csrf_token %}
-                            
-                            <!-- Blood Group -->
                             <div class="mb-3">
                                 <label for="bloodGroup" class="form-label">Required Blood Group</label>
                                 <select class="form-select" id="bloodGroup" name="requested_blood_group" required>
-                                   
                                     <option value="A+">A+</option>
                                     <option value="A-">A-</option>
                                     <option value="B+">B+</option>
@@ -146,8 +186,6 @@
                                     <option value="AB-">AB-</option>
                                 </select>
                             </div>
-                            
-                            <!-- Urgency Level -->
                             <div class="mb-3">
                                 <label for="urgency" class="form-label">Urgency Level</label>
                                 <select class="form-select" id="urgency" name="urgency" required>
@@ -157,190 +195,175 @@
                                     <option value="7 days">Within 7 days</option>
                                 </select>
                             </div>
-                        
-                            <!-- Hospital/Location -->
                             <div class="mb-3">
                                 <label for="location" class="form-label">Hospital/Location</label>
                                 <input type="text" class="form-control" id="location" name="location" placeholder="Enter hospital or location" required>
                             </div>
-                        
-                            <!-- Additional Information -->
                             <div class="mb-3">
                                 <label for="additionalInfo" class="form-label">Additional Information</label>
                                 <textarea class="form-control" id="additionalInfo" name="additional_info" rows="3" placeholder="Provide any additional details"></textarea>
                             </div>
-                        
-                            <!-- Submit Button -->
-                            <button type="submit" class="btn btn-success">Submit Blood Request</button>
+                            <button type="submit" class="btn btn-custom">Submit Blood Request</button>
                         </form>
-                        
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Available Donors -->
-<div class="card mb-4">
-    <div class="card-header">
-        Available Donors Matching Your Request
-    </div>
-    <div class="card-body">
-        <div class="list-group">
-            {% if matching_donors %}
-                {% for donor in matching_donors %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5>{{ donor.username }}</h5>
-                            <p>Blood Type: {{ donor.blood_group }}</p>
-                            <p>Location: {{ donor.location }}</p>
-                        </div>
-                        <div>
-                            <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">View Profile</a>
-                            <a href="#" class="btn btn-success">Send Message</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No matching donors found.</p>
-            {% endif %}
-        </div>
-    </div>
-    <div class="card-footer">
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#allDonorsModal">
-            View All Available Donors
-        </button>
-    </div>
-</div>
-
-<!-- Modal for All Donors -->
-<div class="modal fade" id="allDonorsModal" tabindex="-1" aria-labelledby="allDonorsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="allDonorsModalLabel">All Available Donors</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                Available Donors Matching Your Request
             </div>
-            <div class="modal-body">
+            <div class="card-body">
                 <div class="list-group">
-                    {% if all_donors %}
-                        {% for donor in all_donors %}
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5>{{ donor.username }}</h5>
-                                    <p>Blood Type: {{ donor.blood_group }}</p>
-                                    <p>Location: {{ donor.location }}</p>
-                                </div>
-                                <div>
-                                    <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">View Profile</a>
-                                    <a href="#" class="btn btn-success">Send Message</a>
-                                </div>
+                    {% if matching_donors %}
+                        {% for donor in matching_donors %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>{{ donor.username }}</h5>
+                                <p>Blood Type: {{ donor.blood_group }}</p>
+                                <p>Location: {{ donor.location }}</p>
                             </div>
+                            <div>
+                                <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">View Profile</a>
+                                <a href="#" class="btn btn-success">Send Message</a>
+                            </div>
+                        </div>
                         {% endfor %}
                     {% else %}
-                        <p>No available donors found.</p>
+                    <p class="text-center">No matching donors found.</p>
                     {% endif %}
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#allDonorsModal">
+                    View All Available Donors
+                </button>
             </div>
         </div>
-    </div>
-</div>
 
+        <!-- Modal for All Donors -->
+        <div class="modal fade" id="allDonorsModal" tabindex="-1" aria-labelledby="allDonorsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="allDonorsModalLabel">All Available Donors</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group">
+                            {% if all_donors %}
+                                {% for donor in all_donors %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5>{{ donor.username }}</h5>
+                                        <p>Blood Type: {{ donor.blood_group }}</p>
+                                        <p>Location: {{ donor.location }}</p>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">View Profile</a>
+                                        <a href="#" class="btn btn-success">Send Message</a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                            <p class="text-center">No available donors found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      <!-- My Requests -->
-<div class="card mb-4">
-    <div class="card-header">
-        My Blood Requests
-    </div>
-    <div class="card-body">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Request Date</th>
-                    <th>Blood Group</th>
-                    <th>Urgency</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in requests %}
-                <tr>
-                    <td>{{ request.request_date|date:"d M Y" }}</td>
-                    <td>{{ request.requested_blood_group }}</td>
-                    <td>{{ request.urgency }}</td>
-                    {% if request.status == 'fulfilled' %}
-                    <td> <span class="badge bg-success text-uppercase">{{ request.status }}</span></td>
-                    {% endif %}
-                    {% if request.status == 'in_progress' %}
-                    <td> <span class="badge bg-info text-uppercase">{{ request.status }}</span></td>
-                    {% endif %}
-                    {% if request.status == 'cancelled' %}
-                    <td> <span class="badge bg-danger text-uppercase">{{ request.status }}</span></td>
-                    {% endif %}
-                    {% if request.status == 'pending' %}
-                    <td> <span class="badge bg-warning text-uppercase">{{ request.status }}</span></td>
-                    {% endif %}
-                    <td>
-                        <a href="{% url 'view-request' request.id %}" class="btn btn-sm btn-secondary">View</a>
-                        <a href="{% url 'cancel-request' request.id %}" class="btn btn-sm btn-danger">Cancel</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+        <!-- My Requests -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                My Blood Requests
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Request Date</th>
+                            <th>Blood Group</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                        <tr>
+                            <td>{{ request.request_date|date:"d M Y" }}</td>
+                            <td>{{ request.requested_blood_group }}</td>
+                            <td>{{ request.urgency }}</td>
+                            {% if request.status == 'fulfilled' %}
+                            <td><span class="badge bg-success text-uppercase">{{ request.status }}</span></td>
+                            {% elif request.status == 'in_progress' %}
+                            <td><span class="badge bg-info text-uppercase">{{ request.status }}</span></td>
+                            {% elif request.status == 'cancelled' %}
+                            <td><span class="badge bg-danger text-uppercase">{{ request.status }}</span></td>
+                            {% else %}
+                            <td><span class="badge bg-warning text-uppercase">{{ request.status }}</span></td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'view-request' request.id %}" class="btn btn-sm btn-secondary">View</a>
+                                <a href="{% url 'cancel-request' request.id %}" class="btn btn-sm btn-danger">Cancel</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<!-- Donation Confirmation -->
-<div class="card mb-4">
-    <div class="card-header">
-        Confirm Donations
-    </div>
-    <div class="card-body">
-        {% if donations_confirmation %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Donation Date</th>
-                    <th>Donor</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for donation in donations_confirmation %}
-                <tr>
-                    <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
-                    <td>{{ donation.donor.username }}</td>
-                    <td>{{ donation.location }}</td>
-                    {% if donation.is_verified %}
-                    <td> <span class="badge bg-success text-uppercase">Verified</span></td>
-                    {% else %}
-                    <td> <span class="badge bg-warning text-uppercase">Pending Verification</span></td>
-                    {% endif %}
-                    <td>
-                        {% if not donation.is_verified %}
-
-                        <a href="{% url 'reject-donation' donation.id %}" class="btn btn-sm btn-danger">Reject</a>
-
-                        <a href="{% url 'verify-donation' donation.id %}" class="btn btn-sm btn-success">Verify</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No Confirmation request found.</p>
-        {% endif %}
-
-    </div>
-</div>
-
+        <!-- Donation Confirmation -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                Confirm Donations
+            </div>
+            <div class="card-body">
+                {% if donations_confirmation %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Donation Date</th>
+                            <th>Donor</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donation in donations_confirmation %}
+                        <tr>
+                            <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
+                            <td>{{ donation.donor.username }}</td>
+                            <td>{{ donation.location }}</td>
+                            {% if donation.is_verified %}
+                            <td><span class="badge bg-success text-uppercase">Verified</span></td>
+                            {% else %}
+                            <td><span class="badge bg-warning text-uppercase">Pending Verification</span></td>
+                            {% endif %}
+                            <td>
+                                {% if not donation.is_verified %}
+                                <a href="{% url 'reject-donation' donation.id %}" class="btn btn-sm btn-danger">Reject</a>
+                                <a href="{% url 'verify-donation' donation.id %}" class="btn btn-sm btn-success">Verify</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No Confirmation requests found.</p>
+                {% endif %}
+            </div>
+        </div>
 
         <!-- Notifications & Messages -->
         <div class="row">
@@ -354,7 +377,6 @@
                         <ul class="list-group">
                             <li class="list-group-item">Donor Name accepted your request.</li>
                             <li class="list-group-item">New donors available matching your blood type.</li>
-                            <!-- Add more notifications as needed -->
                         </ul>
                     </div>
                 </div>
@@ -370,7 +392,6 @@
                             <a href="#" class="list-group-item list-group-item-action">
                                 Message from Donor Name
                             </a>
-                            <!-- Add more messages as needed -->
                         </div>
                     </div>
                 </div>
@@ -379,7 +400,7 @@
 
         <!-- Health Resources -->
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header text-center">
                 Health Resources & Tips
             </div>
             <div class="card-body">
@@ -389,7 +410,7 @@
                     <li>Preparing for a blood transfusion.</li>
                     <li>Post-transfusion care and monitoring.</li>
                 </ul>
-                <a href="#" class="btn btn-success">Learn More</a>
+                <a href="#" class="btn btn-custom">Learn More</a>
             </div>
         </div>
 

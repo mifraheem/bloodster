@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from ..models import BloodRequest, BloodDonation
+from ..models import BloodRequest, BloodDonation, User
 
 
 @login_required
@@ -115,9 +115,9 @@ def fulfill_request(request, request_id):
 @login_required
 def confirm_donation_by_recipient(request, id):
     target_donation = get_object_or_404(
-        BloodDonation, id=id, recipient=request.user)
+        BloodDonation, id=id, recipient=request.user
+    )
 
-    # Check if the donation is already verified
     if target_donation.is_verified:
         messages.error(request, "This donation is already verified.")
         return redirect('recipient-dashboard')
@@ -125,7 +125,10 @@ def confirm_donation_by_recipient(request, id):
     target_donation.is_verified = True
     target_donation.save()
 
-    # Confirmation message
+    target_donor = target_donation.donor
+    target_donor.stars += 1
+    target_donor.save()
+
     messages.success(request, "Thank you for your confirmation.")
     return redirect('recipient-dashboard')
 

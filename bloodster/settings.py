@@ -1,3 +1,4 @@
+import os
 from django.contrib.messages import constants as messages
 from pathlib import Path
 
@@ -7,7 +8,7 @@ SECRET_KEY = 'django-insecure-y@v#x&0h51a*dq^qa4-0utct80tw+30d2uehob#6b14kv!-i#q
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,7 +85,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

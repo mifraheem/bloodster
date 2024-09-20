@@ -36,12 +36,10 @@ def recipt_dashboard(request):
             request, "You're not allowed to visit Recipient Dashboard")
         return redirect('home')
 
-    # Get all blood requests for the logged-in recipient
     blood_requests = BloodRequest.objects.filter(recipient=request.user)
 
     matching_donors = find_matching_donors_for_all_requests(request.user)
 
-    # Get all donors excluding the matched ones
     all_donors = User.objects.filter(user_type='donor').exclude(
         id__in=[donor.id for donor in matching_donors])
 

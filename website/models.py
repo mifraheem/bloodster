@@ -5,6 +5,16 @@ from django.utils import timezone
 from datetime import timedelta
 
 
+class Badge(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    icon = models.ImageField(upload_to='badges/icons/', blank=True, null=True)
+    threshold = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         ('donor', 'Donor'),
@@ -14,8 +24,7 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
-    blood_group = models.CharField(
-        max_length=3, blank=True, null=True)
+    blood_group = models.CharField(max_length=3, blank=True, null=True)
     location = models.CharField(max_length=255)
     user_type = models.CharField(
         max_length=10, choices=USER_TYPE_CHOICES, default='recipient')
@@ -25,6 +34,24 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.user_type == 'donor':
+            self.assign_badges()
+
+    def assign_badges(self):
+        total_donations = BloodDonation.objects.filter(
+            donor=self, is_verified=True).count()
+
+        # Get all badges
+        badges = Badge.objects.all()
+
+        for badge in badges:
+            if total_donations >= badge.threshold and badge not in self.badges.all():
+                self.badges.add(badge)
+                print(f"Badge {badge.name} awarded to {self.username}")
 
 
 class BloodRequest(models.Model):
@@ -88,18 +115,6 @@ class BloodDonation(models.Model):
         return True
 
 
-class Badge(models.Model):
-    # e.g., '5 Donations', 'Life Saver'
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    icon = models.ImageField(upload_to='badges/icons/', blank=True, null=True)
-    # Number of donations needed to earn this badge
-    threshold = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return self.name
-
-
 class Message(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -129,15 +144,16 @@ class Campaign(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField()
     location = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='campaign_images/', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='campaign_images/', blank=True, null=True)
 
     def __str__(self):
         return self.title
-
 
 
 class Gallery(models.Model):
     image = models.ImageField(upload_to='gallery/')  # Image upload field
 
     def __str__(self):
-        return f"Image {self.id}"  # This returns the image ID when converted to string
+        # This returns the image ID when converted to string
+        return f"Image {self.id}"

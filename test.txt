@@ -1,0 +1,69 @@
+python manage.py shell
+
+from website.models import Badge
+
+# List of badge data
+badges_data = [
+    {
+        "name": "First Step Hero",
+        "description": "Your journey to saving lives has begun!",
+        "threshold": 3
+    },
+    {
+        "name": "Dedicated Donor",
+        "description": "Thank you for your continued commitment to donating blood.",
+        "threshold": 6
+    },
+    {
+        "name": "Life Saver",
+        "description": "You have made a significant impact in saving lives!",
+        "threshold": 9
+    },
+    {
+        "name": "Silver Donor",
+        "description": "You’ve earned the Silver Donor badge! Keep up the amazing work!",
+        "threshold": 12
+    },
+    {
+        "name": "Urgent Responder",
+        "description": "Your quick response is helping save lives in critical situations!",
+        "threshold": 15
+    },
+    {
+        "name": "Community Champion",
+        "description": "You are a pillar of the blood donation community!",
+        "threshold": 18
+    },
+    {
+        "name": "Golden Donor",
+        "description": "You've reached 21 donations. Your generosity knows no bounds!",
+        "threshold": 21
+    },
+    {
+        "name": "Humanitarian Hero",
+        "description": "Your consistent efforts are making a huge difference!",
+        "threshold": 24
+    },
+    {
+        "name": "Blood Champion",
+        "description": "You are a true champion of blood donation!",
+        "threshold": 27
+    },
+    {
+        "name": "Platinum Donor",
+        "description": "You've reached an incredible milestone with 30 donations!",
+        "threshold": 30
+    }
+]
+
+# Loop through the badge data and create Badge objects
+for badge_data in badges_data:
+    badge, created = Badge.objects.get_or_create(
+        name=badge_data["name"],
+        description=badge_data["description"],
+        threshold=badge_data["threshold"]
+    )
+    if created:
+        print(f"Created badge: {badge.name}")
+    else:
+        print(f"Badge already exists: {badge.name}")
