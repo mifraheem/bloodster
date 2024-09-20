@@ -51,14 +51,22 @@ def handle_login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=User.objects.get(
-            email=email), password=password)
+        if not email or not password:
+            messages.error(request, 'Please provide both email and password.')
+            return render(request, 'web/login.html')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid email or password.')
+            return render(request, 'web/login.html')
+
+        user = authenticate(request, username=user.username, password=password)
 
         if user is not None:
-            # Login the user
             auth_login(request, user)
             messages.success(request, 'Login successful!')
-            return redirect('home')  # Redirect to a success page or home page
+            return redirect('home')
         else:
             messages.error(request, 'Invalid email or password.')
 
@@ -82,14 +90,12 @@ def update_profile(request):
         blood_group = request.POST.get('blood_group')
         location = request.POST.get('location')
 
-        # Validate email
         try:
             validate_email(email)
         except ValidationError:
             messages.error(request, "Invalid email address.")
             return redirect('update_profile')
 
-        # Check if username or email already exists
         if User.objects.exclude(pk=user.pk).filter(username=username).exists():
             messages.error(request, "Username already taken.")
             return redirect('update_profile')
@@ -98,7 +104,6 @@ def update_profile(request):
             messages.error(request, "Email already taken.")
             return redirect('update_profile')
 
-        # Update user profile
         user.username = username
         user.email = email
         user.phone_number = phone_number
@@ -107,7 +112,6 @@ def update_profile(request):
         user.save()
 
         messages.success(request, "Profile updated successfully.")
-        # Redirect to a profile page or some other page
         return redirect('update_profile')
 
     return render(request, 'web/profile.html')

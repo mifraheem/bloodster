@@ -1,39 +1,5 @@
-/**
- * File: styles.css
- * Description : Contains all necessary styling for the Reddrop Buddies - Blood Donation Campaign & Multi-Concept Activism Template
- * Author: xenioushk
- * URL: https://themeforest.net/item/blood-donation-activism-campaign-html5-template/19767842
- * Project: Reddrop Buddies - Blood Donation Campaign & Multi-Concept Activism Template
- * Version: 1.0.3
- * Last Update: 23-09-2023
- **/
-/*========================================================================*/
-/*   TABLE OF CONTENT
-/*========================================================================*/
-/*
-/*      01. GENERAL STYLING
-/*      02. HEADER
-/*      03. MAIN NAVIGATION MENU
-/*      04. HOME PAGE
-/*      05. BLOG LAYOUT
-/*      06. BLOG SINGLE PAGE
-/*      07. EVENTS/CAMPAIGN PAGE
-/*      08. ABOUT US PAGE
-/*      09. GALLERY PAGE
-/*      10. SERVICE PAGE
-/*      11. 404 PAGE
-/*      12. FOOTER
-/*      13. SIDEBAR & WIDGETS
-/*      14. RESPONSIVE STYLING
-/*
-/*========================================================================*/
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700|Poppins:300,400");
 
-/**
- * html5doctor.com Reset Stylesheet (Eric Meyer's Reset Reloaded + HTML5 baseline)
- * v1.6.1 2010-09-17 | Authors: Eric Meyer & Richard Clark
- * html5doctor.com/html-5-reset-stylesheet/
- */
 html,
 body,
 div,
