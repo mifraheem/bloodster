@@ -13,7 +13,7 @@ from django.db.models import Q
 def chat(request, chat_user=None):
     chat = False
     target_user = None
-    chats = False
+    chats = None
 
     if chat_user:
         chat = True

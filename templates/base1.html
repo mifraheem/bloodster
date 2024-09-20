@@ -22,7 +22,7 @@
             <div class="header-top">
                 <div class="container">
                     <div class="row col-det">
-                        <div class="col-lg-6 d-none d-lg-block">
+                        <div class="col-lg-6 d-none d-lg-block text-center center">
                             <ul class="ulleft">
                                 <li>
                                     <i class="far fa-envelope"></i>
@@ -30,13 +30,14 @@
                                     <span>|</span></li>
                                 <li>
                                     <i class="far fa-clock"></i>
-                                    Service Time : 12:AM</li>
+                                    Service Time : 24 Hours</li>
                             </ul>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <ul class="ulright ">
-                                
+                                {% if not user.is_authenticated %}
                                 <li > <a href="/login" class="text-light"><i class="fas fa-user"></i>Login</li></a>
+                                {% endif %}
                                     
                             </ul>
                         </div>
@@ -46,12 +47,11 @@
             <div id="menu-jk" class="header-bottom" style="border-bottom: 2px solid red;">
                 <div class="container">
                     <div class="row nav-row">
-                        <div class="col-md-3 logo">
+                        <a href='/' class="col-md-3 logo">
                             <img src="{% static 'assets/images/bloodster.png' %}" alt="Bloodster Logo" style="height: 60px;">
-                        </div>
+                        </a>
                         <div class="col-md-9 nav-col">
                             <nav class="navbar navbar-expand-lg navbar-light">
-                                <!-- Hamburger Menu Button for Small Screens -->
                                 <button
                                     class="navbar-toggler"
                                     type="button"
