@@ -7,14 +7,80 @@
     <title>Donor Profile</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .badge-list li {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .badge-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .badge-latest {
+            text-align: center;
+        }
+
+        .badge-latest img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .badge-latest .badge-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .badge-latest .badge-description {
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .action-buttons {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .right-column {
+            border-left: 2px solid #eee;
+        }
+
+        .badge-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge-container h4 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container my-5">
         <div class="row">
             <!-- Donor Profile Card -->
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
+            <div class="col-lg-8">
+                <div class="card profile-card">
                     <div class="card-header bg-primary text-white">
                         Donor Profile
                     </div>
@@ -22,31 +88,64 @@
                         <div class="row">
                             <!-- Donor Image -->
                             <div class="col-md-4 text-center">
-                                <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3"
-                                    alt="Donor Image">
+                                <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" alt="Donor Image">
                             </div>
                             <!-- Donor Info -->
                             <div class="col-md-8">
-                                <h3>@{{donor.username}}</h3>
-                                <p><strong>Blood Type:</strong> {{donor.blood_group}}</p>
-                                <p><strong>Location:</strong> {{donor.location}}</p>
-                                <p><strong>Last Donation:</strong> June 12, 2023</p>
-                                <p><strong>Contact:</strong> {{donor.email}}</p>
-                                <p><strong>Phone:</strong> {{donor.phone}}</p>
+                                <h3>{{ donor.username }}</h3>
+                                <p><strong>Blood Type:</strong> {{ donor.blood_group }}</p>
+                                <p><strong>Location:</strong> {{ donor.location }}</p>
+                                <p><strong>Contact:</strong> {{ donor.email }}</p>
+                                <p><strong>Phone:</strong> {{ donor.phone_number }}</p>
+                                <p><strong>Stars:</strong> ⭐ {{ donor.stars }}</p>
                             </div>
                         </div>
+
+                        <!-- Latest Badge -->
+                        {% if donor.badges.all %}
+                        <div class="mt-4 badge-latest">
+                            <h5>Latest Badge</h5>
+                            {% with donor.badges.last as latest_badge %}
+                            {% if latest_badge.icon %}
+                            <img src="{{ latest_badge.icon.url }}" alt="{{ latest_badge.name }}" class="img-fluid">
+                            {% endif %}
+                            <div class="badge-name">{{ latest_badge.name }}</div>
+                            <div class="badge-description">{{ latest_badge.description }}</div>
+                            {% endwith %}
+                        </div>
+                        {% endif %}
+
                         <!-- Additional Info -->
                         <div class="mt-4">
                             <h6>Donor's Additional Information:</h6>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non arcu quis lorem
-                                vulputate hendrerit. Curabitur vel nisi a enim efficitur ultrices at sed risus.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel nisi a enim efficitur ultrices at sed risus.</p>
                         </div>
+
                         <!-- Action Buttons -->
-                        <div class="d-flex justify-content-end mt-4">
-                            <a href="#" class="btn btn-primary me-2">Send Message</a>
+                        <div class="action-buttons">
+                            <a href="/chat/{{donor.username}}" class="btn btn-primary me-2">Send Message</a>
                             <a href="#" class="btn btn-secondary">Request Donation</a>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar for All Badges -->
+            <div class="col-lg-4 right-column">
+                <div class="badge-container">
+                    <h4>All Earned Badges</h4>
+                    <ul class="badge-list">
+                        {% for badge in donor.badges.all %}
+                        <li>
+                            {% if badge.icon %}
+                            <img src="{{ badge.icon.url }}" alt="{{ badge.name }}" class="badge-icon">
+                            {% endif %}
+                            <p>{{ badge.name }}</p>
+                        </li>
+                        {% empty %}
+                        <li>No badges earned yet.</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
