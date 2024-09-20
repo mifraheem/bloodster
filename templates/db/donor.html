@@ -2,27 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donor Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
         }
         .dashboard-header {
             background-color: #dc3545;
             color: white;
-            padding: 20px;
+            padding: 30px;
             text-align: center;
+            border-bottom: 4px solid #bb2d3b;
         }
         .card {
             border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         .card-header {
             background-color: #dc3545;
             color: white;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            font-weight: bold;
+            text-align: center;
         }
         .badge-custom {
             background-color: #ffc107;
@@ -37,6 +44,31 @@
         }
         .nav-link:hover {
             color: #ffc107 !important;
+        }
+        .btn-custom {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #bb2d3b;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .list-group-item {
+            border: none;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .alert {
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -85,26 +117,28 @@
         <h1>Welcome, {{user.username}}</h1>
         <p>Saving lives one donation at a time!</p>
     </header>
+
+    <!-- Alert Messages -->
     {% if messages %}
-    <div class="d-flex justify-content-center">
-        <div class="alert-container">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-{% endif %}
-
+    {% endif %}
 
     <!-- Main Content -->
     <div class="container mt-5">
-
-        <!-- Profile Summary -->
-        <div class="row mb-4">
-            <div class="col-md-3">
+        <div class="row">
+            <!-- Profile Summary -->
+            <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card text-center">
                     <div class="card-header">
                         Profile Summary
@@ -122,7 +156,7 @@
             </div>
 
             <!-- Next Donation Eligibility -->
-            <div class="col-md-9">
+            <div class="col-lg-9 col-md-6 mb-4">
                 <div class="card text-center">
                     <div class="card-header">
                         Next Donation Eligibility
@@ -130,143 +164,109 @@
                     <div class="card-body">
                         <h5>You are eligible to donate blood in:</h5>
                         <h1>30 Days</h1>
-                        <a href="#" class="btn btn-danger">Schedule Next Donation</a>
+                        <a href="#" class="btn btn-custom">Schedule Next Donation</a>
                     </div>
                 </div>
             </div>
         </div>
 
-  <!-- Donation History -->
-<div class="card mb-4">
-    <div class="card-header">
-        Donation History
-    </div>
-    <div class="card-body">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Recipient</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for donation in donations %}
-                <tr>
-                    <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
-                    <td>{{ donation.location }}</td>
-                    <td>{{ donation.recipient.username }}</td>
-                    <td>{{ donation.is_verified|yesno:"Verified,Pending Verification" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">No donation records found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Current Blood Requests Matching Your Blood Type -->
-<div class="card mb-4">
-    <div class="card-header">
-        Your Accepted Blood Requests
-    </div>
-    <div class="card-body">
-        <div class="list-group">
-            {% for request in accepted_requests %}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <h5>{{ request.recipient.username }}</h5>
-                    <p>Blood Type: {{ request.requested_blood_group }}</p>
-                    <p>Location: {{ request.location }}</p>
-                </div>
-                <div>
-                    <a href="{% url 'fulfill-request' request.id %}" class="btn btn-success">Fulfill Request</a>
-                    <a href="#" class="btn btn-secondary">Cancel</a>
-                </div>
+        <!-- Donation History -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Donation History
             </div>
-            {% empty %}
-            <p class="text-center">You haven't accepted any new Blood Request.</p>
-            {% endfor %}
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Recipient</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donation in donations %}
+                        <tr>
+                            <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
+                            <td>{{ donation.location }}</td>
+                            <td>{{ donation.recipient.username }}</td>
+                            <td>{{ donation.is_verified|yesno:"Verified,Pending Verification" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No donation records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</div>
-<!-- Current Blood Requests Matching Your Blood Type -->
-<div class="card mb-4">
-    <div class="card-header">
-        Current Blood Requests Matching Your Blood Type
-    </div>
-    <div class="card-body">
-        <div class="list-group">
-            {% for request in matching_requests %}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <h5>{{ request.recipient.username }}</h5>
-                    <p>Blood Type: {{ request.requested_blood_group }}</p>
-                    <p>Location: {{ request.location }}</p>
-                </div>
-                <div>
-                    <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
-                    <a href="#" class="btn btn-secondary">Decline</a>
-                </div>
-            </div>
-            {% empty %}
-            <p class="text-center">No matching blood requests at the moment.</p>
-            {% endfor %}
-        </div>
-    </div>
-</div>
 
-<!-- Button to Show All Requests in a Modal -->
-<div class="text-center mt-4">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#allRequestsModal">
-        Show All Requests
-    </button>
-</div>
-
-<!-- Modal for All Requests -->
-<div class="modal fade" id="allRequestsModal" tabindex="-1" aria-labelledby="allRequestsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="allRequestsModalLabel">All Blood Requests</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="list-group">
-                    {% for request in all_requests %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5>{{ request.recipient.username }}</h5>
-                            <p>Blood Type: {{ request.requested_blood_group }}</p>
-                            <p>Location: {{ request.location }}</p>
-                        </div>
-                        <div>
-                            <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
-                            <a href="#" class="btn btn-secondary">Decline</a>
+        <!-- Blood Requests -->
+        <div class="row">
+            <!-- Accepted Requests -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        Your Accepted Blood Requests
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for request in accepted_requests %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5>{{ request.recipient.username }}</h5>
+                                    <p>Blood Type: {{ request.requested_blood_group }}</p>
+                                    <p>Location: {{ request.location }}</p>
+                                </div>
+                                <div>
+                                    <a href="{% url 'fulfill-request' request.id %}" class="btn btn-success">Fulfill Request</a>
+                                    <a href="#" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center">You haven't accepted any new Blood Request.</p>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% empty %}
-                    <p class="text-center">No blood requests available.</p>
-                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Matching Requests -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        Current Blood Requests Matching Your Blood Type
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for request in matching_requests %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5>{{ request.recipient.username }}</h5>
+                                    <p>Blood Type: {{ request.requested_blood_group }}</p>
+                                    <p>Location: {{ request.location }}</p>
+                                </div>
+                                <div>
+                                    <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
+                                    <a href="#" class="btn btn-secondary">Decline</a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center">No matching blood requests at the moment.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Bootstrap 5 Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 
         <!-- Notifications & Messages -->
         <div class="row">
             <!-- Notifications -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
                     <div class="card-header">
                         Notifications
                     </div>
@@ -280,8 +280,8 @@
                 </div>
             </div>
             <!-- Messages -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
                     <div class="card-header">
                         Messages
                     </div>
@@ -309,7 +309,44 @@
                     <li>Eat a balanced diet rich in iron and vitamins.</li>
                     <li>Get adequate rest and sleep.</li>
                 </ul>
-                <a href="#" class="btn btn-danger">Read More Health Tips</a>
+                <a href="#" class="btn btn-custom">Read More Health Tips</a>
+            </div>
+        </div>
+
+        <!-- Modal for All Requests -->
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#allRequestsModal">
+                Show All Requests
+            </button>
+        </div>
+
+        <div class="modal fade" id="allRequestsModal" tabindex="-1" aria-labelledby="allRequestsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="allRequestsModalLabel">All Blood Requests</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group">
+                            {% for request in all_requests %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5>{{ request.recipient.username }}</h5>
+                                    <p>Blood Type: {{ request.requested_blood_group }}</p>
+                                    <p>Location: {{ request.location }}</p>
+                                </div>
+                                <div>
+                                    <a href="{% url 'accept_blood_request' request.id %}" class="btn btn-success">Accept Request</a>
+                                    <a href="#" class="btn btn-secondary">Decline</a>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-center">No blood requests available.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -317,5 +354,5 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+</body>
 </html>
