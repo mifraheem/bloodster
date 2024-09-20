@@ -89,6 +89,7 @@ def update_profile(request):
         phone_number = request.POST.get('phone_number')
         blood_group = request.POST.get('blood_group')
         location = request.POST.get('location')
+        profile_picture = request.FILES.get('profile')
 
         try:
             validate_email(email)
@@ -109,6 +110,9 @@ def update_profile(request):
         user.phone_number = phone_number
         user.blood_group = blood_group
         user.location = location
+        if profile_picture:
+            user.profile = profile_picture
+
         user.save()
 
         messages.success(request, "Profile updated successfully.")

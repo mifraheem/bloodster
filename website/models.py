@@ -31,6 +31,7 @@ class User(AbstractUser):
 
     badges = models.ManyToManyField('Badge', blank=True)
     stars = models.PositiveIntegerField(default=0)
+    profile = models.ImageField(upload_to="proifles/", blank=True, null=True)
 
     def __str__(self):
         return self.username

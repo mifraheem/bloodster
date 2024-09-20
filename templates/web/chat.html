@@ -40,10 +40,17 @@
                                     <li class="p-2 border-bottom bg-body-tertiary">
                                         <a href="/chat/{{s_user.username}}" class="d-flex justify-content-between">
                                             <div class="d-flex flex-row">
-                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp"
+                                                {% if s_user.profile %}
+                                                <img src="/media/{{s_user.profile}}"
                                                     alt="avatar"
                                                     class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                     width="60">
+                                                    {% else %}
+                                                <img src="https://placehold.co/400x400/png"
+                                                    alt="avatar"
+                                                    class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                    width="60">
+                                                {% endif %}
                                                 <div class="pt-1">
                                                     <p class="fw-bold mb-0 text-decoration-none">{{s_user.username}}</p>
                                                     <p class="small text-muted text-decoration-none">
@@ -85,14 +92,24 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                                        class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+                                    {% if chat.sender.profile %}
+                                    <img src="/media/{{chat.sender.profile}}" alt="avatar"
+                                    class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+                                    {% else %}
+                                    <img src="https://placehold.co/400x400/png" alt="avatar"
+                                    class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+                                    {% endif %}
                                 </li>
                                 {% else %}
                                 <li class="d-flex justify-content-between mb-4">
-
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                                    {% if chat.sender.profile %}
+                                    <img src="/media/{{chat.sender.profile}}" alt="avatar"
                                         class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                                        {% else %}
+
+                                        <img src="https://placehold.co/400x400/png" alt="avatar"
+                                        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                                    {% endif %}
                                     <div class="card w-100">
                                         <div class="card-header d-flex justify-content-between p-3">
                                             <p class="fw-bold mb-0">{{chat.sender.username}}</p>
@@ -158,14 +175,14 @@
                     body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for security
+                        'X-CSRFToken': getCookie('csrftoken') 
                     }
                 })
-                    .then(response => response.json())  // Expect JSON response
+                    .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            appendMessage(data.chat);  // Call function to append message
-                            chatForm.reset();  // Clear the textarea after submission
+                            appendMessage(data.chat); 
+                            chatForm.reset();  
                             scrollToBottom();
                         } else {
                             alert('Error sending message. Please try again.');
@@ -180,21 +197,23 @@
             function appendMessage(chat) {
                 const li = document.createElement('li');
                 li.className = 'd-flex justify-content-between mb-4';
-
+            
+                // Check if the profile picture exists, otherwise use the placeholder
+                const profileImage = chat.sender.profile ? chat.sender.profile.picture : 'https://placehold.co/400x400/png';
+            
                 const cardHtml = `
-            <div class="card w-100">
-              <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">${chat.sender}</p>
-                <p class="text-muted small mb-0"><i class="far fa-clock"></i> Just now</p>
-              </div>
-              <div class="card-body">
-                <p class="mb-0">${chat.content}</p>
-              </div>
-            </div>
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                 class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
-        `;
-
+                    <div class="card w-100">
+                      <div class="card-header d-flex justify-content-between p-3">
+                        <p class="fw-bold mb-0">${chat.sender}</p>
+                        <p class="text-muted small mb-0"><i class="far fa-clock"></i> Just now</p>
+                      </div>
+                      <div class="card-body">
+                        <p class="mb-0">${chat.content}</p>
+                      </div>
+                    </div>
+                    <img src="${profileImage}" alt="avatar"
+                         class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+                `;
                 li.innerHTML = cardHtml;
                 chatArea.appendChild(li);
             }
@@ -273,13 +292,13 @@
                         <p class="mb-0">${chat.content}</p>
                     </div>
                 </div>
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+                <img src="https://placehold.co/400x400/png" alt="avatar"
                      class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
             `;
         } else {
             // Receiver's message (aligned to the left)
             li.innerHTML = `
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                <img src="https://placehold.co/400x400/png" alt="avatar"
                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
                 <div class="card w-100">
                     <div class="card-header d-flex justify-content-between p-3">

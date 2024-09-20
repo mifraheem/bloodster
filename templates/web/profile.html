@@ -7,17 +7,17 @@
         <div class="col-md-4">
             <h4>Profile Picture</h4>
             <!-- Image preview -->
-            <img id="profileImagePreview" src="{{ user.profile_image_url }}" alt="Profile Image" class="img-thumbnail" width="200">
+            <img id="profileImagePreview" src="/media/{{ user.profile }}" alt="Profile Image" class="img-thumbnail" width="200">
             <br><br>
             <label for="id_profile_image" class="btn btn-primary">
                 Change Profile Picture
             </label>
-            <input type="file" id="id_profile_image" style="display:none;" onchange="previewImage(event)">
         </div>
-
+        
         <div class="col-md-8">
-            <form method="POST" enctype="multipart/form-data">
+            <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="file" id="id_profile_image" name="profile" style="display:none;" onchange="previewImage(event)">
                 <div class="form-group">
                     <label for="id_username">Username</label>
                     <input type="text" class="form-control" id="id_username" name="username" value="{{ user.username }}" required>
@@ -62,7 +62,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success">Update Profile</button>
+                <button type="submit" class="btn btn-success w-100">Update Profile</button>
             </form>
         </div>
     </div>

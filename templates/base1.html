@@ -37,6 +37,9 @@
                             <ul class="ulright ">
                                 {% if not user.is_authenticated %}
                                 <li > <a href="/login" class="text-light"><i class="fas fa-user"></i>Login</li></a>
+                                {% else %}
+                                <li > <a href="/update_profile" class="text-light"><i class="fas fa-user"></i>Profile</li></a>
+
                                 {% endif %}
                                     
                             </ul>
