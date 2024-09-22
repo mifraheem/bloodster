@@ -24,8 +24,8 @@
 
                         <div class=" vbh">
 
-                            <div class="btn btn-success  bounceInUp"> About Us </div>
-                            <div class="btn btn-success  bounceInUp"> Contact US </div>
+                            <div class="btn btn-danger  bounceInUp"> About Us </div>
+                            <div class="btn btn-danger  bounceInUp"> Contact US </div>
                         </div>
                     </div>
                 </div>
@@ -103,60 +103,55 @@
             </div>
             <div class="text-center">
                 <a href="{% url 'full_gallery' %}">
-                    <div class="btn btn-success bounceInUp mt-4 px-5">See More</div>
+                    <div class="btn btn-danger bounceInUp mt-4 px-5">See More</div>
                 </a>
             </div>
         </div>
         
-    
+    </div>
     
     
      <!-- ################# Donation Process Start Here #######################--->
      
      <section id="process" class="donation-care">
-         <div class="container">
-           <div class="row session-title">
-               <h2>Donation Process</h2>
-               <p class="text-center">The donation process from the time you arrive center until the time you leave</p>
-           </div>
-            <div class="row">
-                 <div class="col-md-3 col-sm-6 vd">
-                    <div class="bkjiu">
-                     <img src="{% static 'assets/images/gallery/g1.jpg' %}" alt="">
-                     <h4><b>1 - </b>Registration</h4>
-                     <p>Join our community and become part of the change. Register now to stay updated on our latest initiatives and events.</p>
-                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
-                     </div>
-                 </div>
-                 <div class="col-md-3 col-sm-6 vd">
-                    <div class="bkjiu">
-                     <img src="{% static 'assets/images/gallery/g2.jpg' %}" alt="">
-                        <h4><b>2 - </b>Seeing</h4>
-                     <p>Experience the impact of your contributions firsthand. By getting involved, you’ll see the positive changes you're </p>
-                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
-                     </div>
-                 </div>
-                 <div class="col-md-3 col-sm-6 vd">
-                    <div class="bkjiu">
-                     <img src="{% static 'assets/images/gallery/g3.jpg' %}" alt="">
-                        <h4><b>3 - </b>Donation</h4>
-                     <p>Your donations make a real difference. Every contribution, no matter how big or small, helps support our mission </p>
-                     {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
-                     </div>
-                 </div>
-                 <div class="col-md-3 col-sm-6 vd">
-                    <div class="bkjiu">
-                        <img src="{% static 'assets/images/gallery/g4.jpg' %}" alt="">
-                        <h4><b>4 - </b>Save Life</h4>
-                         <p>By donating, you become a hero to someone in need. Your generosity can give someone a second chance at life. </p>
-                         {% comment %} <button class="btn btn-sm btn-danger">Readmore <i class="fas fa-arrow-right"></i></button> {% endcomment %}
-                    </div> 
-                 </div>
+        <div class="container">
+            <div class="row session-title">
+                <h2>Donation Process</h2>
+                <p class="text-center">The donation process from the time you arrive center until the time you leave</p>
             </div>
-            
-             
-         </div>
-     </section>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 vd">
+                    <div class="bkjiu">
+                        <img src="{% static 'assets/images/gallery/reg.jpg' %}" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                        <h4><b>1 - </b>Registration</h4>
+                        <p>Join our community and become part of the change. Register now to stay updated on our latest initiatives and events.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 vd">
+                    <div class="bkjiu">
+                        <img src="{% static 'assets/images/gallery/img01.jpg' %}" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                        <h4><b>2 - </b>Seeing</h4>
+                        <p>Experience the impact of your contributions firsthand. By getting involved, you’ll see the positive changes you're making.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 vd">
+                    <div class="bkjiu">
+                        <img src="{% static 'assets/images/gallery/img3.jpg' %}" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                        <h4><b>3 - </b>Donation</h4>
+                        <p>Your donations make a real difference. Every contribution, no matter how big or small, helps support our mission.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 vd">
+                    <div class="bkjiu">
+                        <img src="{% static 'assets/images/gallery/save.jpg' %}" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                        <h4><b>4 - </b>Save Life</h4>
+                        <p>By donating, you become a hero to someone in need. Your generosity can give someone a second chance at life.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
      
      
      
@@ -164,28 +159,28 @@
          <!--################### Our Blog Starts Here #######################--->
          <div id="campaigns" class="blog-container container-fluid">
             <div class="container">
-                <div class="session-title row">
+                <div class="session-title row text-center">
                     <h2>Latest Campaigns</h2>
                     <p>Stay informed with the latest updates and insights. Our campaigns will keep you engaged and inspired.</p>
                 </div>
                 <div class="row news-row">
                     {% for campaign in latest_campaigns %}
                     <div class="col-md-6 h-50">
-                        <div class="news-card ">
-                            <div class="image mt-2">
+                        <div class="news-card" style="border: 1px solid #ddd; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <div class="image mt-2" style="width: 100%; height: 200px; overflow: hidden;">
                                 {% if campaign.image %}
-                                    <img src="{{ campaign.image.url }}" alt="{{ campaign.title }}">
+                                    <img src="{{ campaign.image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% else %}
-                                    <img src="{% static 'assets/images/blog/default_image.jpg' %}" alt="No Image Available">
+                                    <img src="{% static 'assets/images/blog/default_image.jpg' %}" alt="No Image Available" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% endif %}
                             </div>
-                            <div class="detail">
-                                <h3>{{ campaign.title }}</h3>
-                                <p>{{ campaign.description|truncatewords:30 }}</p>
-                                <p class="footp">
+                            <div class="detail" style="padding: 15px;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">{{ campaign.title }}</h3>
+                                <p style="font-size: 1rem; color: #666;">{{ campaign.description|truncatewords:30 }}</p>
+                                <p class="footp" style="font-size: 0.9rem; color: #999;">
                                     {{ campaign.date }} <span>/</span>
                                     {{ campaign.location }} <span>/</span>
-                                    <a href="{% url 'campaign_list' %}">Read More</a>
+                                    <a href="{% url 'campaign_list' %}" style="color: #007bff;">Read More</a>
                                 </p>
                             </div>
                         </div>
@@ -194,11 +189,12 @@
                 </div>
                 <div class="text-center">
                     <a href="{% url 'campaign_list' %}">
-                        <div class="btn btn-success bounceInUp mt-4 px-5">View All</div>
+                        <div class="btn btn-danger bounceInUp mt-4 px-5">View All</div>
                     </a>
                 </div>
             </div>
         </div>
+        
         
         
 
