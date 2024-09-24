@@ -46,7 +46,6 @@ class User(AbstractUser):
         total_donations = BloodDonation.objects.filter(
             donor=self, is_verified=True).count()
 
-        # Get all badges
         badges = Badge.objects.all()
 
         for badge in badges:
@@ -153,8 +152,17 @@ class Campaign(models.Model):
 
 
 class Gallery(models.Model):
-    image = models.ImageField(upload_to='gallery/')  # Image upload field
+    image = models.ImageField(upload_to='gallery/')
 
     def __str__(self):
-        # This returns the image ID when converted to string
         return f"Image {self.id}"
+
+
+class QuickMessage(models.Model):
+    name = models.CharField(max_length=100)
+    mobile_no = models.CharField(max_length=15)
+    email = models.EmailField(max_length=100)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.name
