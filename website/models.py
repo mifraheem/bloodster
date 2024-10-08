@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -33,6 +34,8 @@ class User(AbstractUser):
     stars = models.PositiveIntegerField(default=0)
     profile = models.ImageField(upload_to="proifles/", blank=True, null=True)
     last_donation = models.DateTimeField(blank=True, null=True)
+    verification_uuid = models.UUIDField(
+        default=uuid.uuid4, editable=False, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.username

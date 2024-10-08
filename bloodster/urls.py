@@ -19,6 +19,8 @@ urlpatterns = [
     path('login/', user_controller.handle_login, name='login'),
     path('logout/', user_controller.handle_logout, name='logout'),
     path('update_profile/', user_controller.update_profile, name="update_profile"),
+    path('verify/<uuid:verification_uuid>/',
+         user_controller.verify_user, name='verify_user'),
 
     # dashboard urls
     path('donor-dashboard/', dashboards.donor_dashboard, name='donor-dashboard'),

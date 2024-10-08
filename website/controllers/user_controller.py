@@ -2,12 +2,16 @@
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import User
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import check_password, make_password
+
+
+from bloodster.email_functions import send_verification_email
 
 
 @csrf_exempt
@@ -27,17 +31,30 @@ def register(request):
             return redirect('register')
 
         try:
+            # Create user instance and save as inactive
             user = User(
                 username=username,
                 email=email,
                 password=make_password(password),
-                user_type=user_type
+                user_type=user_type,
+                is_active=False  # Set user as inactive initially
             )
             user.save()
 
-            messages.success(
-                request, 'Registration successful! You can now log in.')
-            return redirect('login')
+            # Send verification email
+            try:
+                send_verification_email(user.email, user.verification_uuid)
+                messages.success(
+                    request, 'Registration successful! Please check your email to verify your account.'
+                )
+                return redirect('register')
+            except Exception as e:
+                print(f'Exception found: {e}')
+                user.delete()
+                messages.error(
+                    request, 'Error sending verification email. Please try again later.')
+                return redirect('register')
+
         except ValidationError as e:
             messages.error(request, f'Error: {e}')
             return redirect('register')
@@ -119,3 +136,25 @@ def update_profile(request):
         return redirect('update_profile')
 
     return render(request, 'web/profile.html')
+
+
+@csrf_exempt
+def verify_user(request, verification_uuid):
+    user = get_object_or_404(User, verification_uuid=verification_uuid)
+    verified = False
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        if password:
+            if check_password(password, user.password):
+                user.is_active = True
+                user.save()
+                verified = True
+                messages.success(
+                    request, "Your account has been successfully verified!")
+                return redirect('login')
+            else:
+                messages.error(
+                    request, "Incorrect password. Please try again.")
+
+    return render(request, 'web/verify.html', {'verified': verified, 'user': user})

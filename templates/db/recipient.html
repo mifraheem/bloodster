@@ -79,26 +79,33 @@
         .alert {
             margin-bottom: 15px;
         }
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
     </style>
 </head>
 
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #198754;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Bloodster</a>
+        <div class="container">
+            <a class="navbar-brand" href="/" style="font-size: 1.75rem; font-weight: bold;">Bloodster</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#recipientNavbar"
                 aria-controls="recipientNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="recipientNavbar">
                 <ul class="navbar-nav ms-auto">
-                   
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'chat' %}">Messages</a>
                     </li>
-                
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'update_profile' %}">Profile Settings</a>
                     </li>
@@ -106,6 +113,7 @@
             </div>
         </div>
     </nav>
+    
 
     <!-- Header -->
     <header class="dashboard-header">
@@ -350,39 +358,6 @@
             </div>
         </div>
 
-        <!-- Notifications & Messages -->
-        <div class="row">
-            <!-- Notifications -->
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Notifications
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">Donor Name accepted your request.</li>
-                            <li class="list-group-item">New donors available matching your blood type.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- Messages -->
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Messages
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Message from Donor Name
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Health Resources -->
         <div class="card mb-4">
             <div class="card-header text-center">
@@ -395,7 +370,7 @@
                     <li>Preparing for a blood transfusion.</li>
                     <li>Post-transfusion care and monitoring.</li>
                 </ul>
-                <a href="#" class="btn btn-custom">Learn More</a>
+              
             </div>
         </div>
 

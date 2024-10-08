@@ -76,24 +76,31 @@
         .overflow-x-auto {
             overflow-x: auto;
         }
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #dc3545;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Bloodster</a>
+        <div class="container">
+            <a class="navbar-brand h1" href="/" style="font-size: 1.75rem; font-weight: bold;">Bloodster</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#donorNavbar" aria-controls="donorNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="donorNavbar">
                 <ul class="navbar-nav ms-auto">
-                 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url "chat" %}">Messages</a>
+                        <a class="nav-link" href="{% url 'chat' %}">Messages</a>
                     </li>
-               
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'update_profile' %}">Profile Settings</a>
                     </li>
@@ -101,6 +108,7 @@
             </div>
         </div>
     </nav>
+    
 
     <!-- Header -->
     <header class="dashboard-header">
@@ -261,39 +269,7 @@
             </div>
         </div>
 
-        <!-- Notifications & Messages -->
-        <div class="row">
-            <!-- Notifications -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        Notifications
-                    </div>
-                    <div class="card-body overflow-x-auto">
-                        <ul class="list-group">
-                            <li class="list-group-item">Thank you for your recent donation!</li>
-                            <li class="list-group-item">New badge earned: Life Saver</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- Messages -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        Messages
-                    </div>
-                    <div class="card-body overflow-x-auto">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Message from Recipient Name
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+   
         <!-- Health Tips -->
         <div class="card mb-4">
             <div class="card-header">
@@ -306,12 +282,11 @@
                     <li>Eat a balanced diet rich in iron and vitamins.</li>
                     <li>Get adequate rest and sleep.</li>
                 </ul>
-                <a href="#" class="btn btn-custom">Read More Health Tips</a>
             </div>
         </div>
 
         <!-- Modal for All Requests -->
-        <div class="text-center mt-4">
+        <div class="text-center mt-3 mb-4">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#allRequestsModal">
                 Show All Requests
             </button>
