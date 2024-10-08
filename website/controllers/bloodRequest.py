@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -73,6 +75,22 @@ def accept_blood_request(request, request_id):
         messages.error(request, "This blood request is no longer available.")
         return redirect('donor-dashboard')
 
+    # Check for existing pending requests by the donor
+    existing_pending_requests = BloodRequest.objects.filter(
+        fulfilled_by=request.user, status='pending'
+    )
+    if existing_pending_requests.exists():
+        messages.error(
+            request, "You cannot accept this request because you have pending requests that you have not fulfilled.")
+        return redirect('donor-dashboard')
+
+    # Check if the last donation was within the last 60 days
+    if request.user.last_donation:
+        if timezone.now() - request.user.last_donation < timedelta(days=60):
+            messages.error(
+                request, "You cannot accept this request because your last donation was within the last 60 days.")
+            return redirect('donor-dashboard')
+
     # Assign the donor to the fulfilled_by field and update the status
     blood_request.fulfilled_by = request.user
     blood_request.status = 'in_progress'
@@ -100,12 +118,17 @@ def fulfill_request(request, request_id):
     target_request.status = 'fulfilled'
     target_request.save()
 
-    BloodDonation.objects.create(
+    # Create the BloodDonation instance
+    donation = BloodDonation.objects.create(
         donor=request.user,
         recipient=target_request.recipient,
         location=target_request.location,
         blood_request=target_request
     )
+
+    # Update the user's last_donation field
+    request.user.last_donation = timezone.now()
+    request.user.save()  # Save the user to update the last_donation field
 
     messages.success(
         request, "Blood request marked as fulfilled and donation recorded.")

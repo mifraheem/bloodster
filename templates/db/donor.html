@@ -89,29 +89,13 @@
             </button>
             <div class="collapse navbar-collapse" id="donorNavbar">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Donations</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Requests</a>
-                    </li>
+                 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "chat" %}">Messages</a>
                     </li>
+               
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Badges & Stars</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Health Tips</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile Settings</a>
+                        <a class="nav-link" href="{% url 'update_profile' %}">Profile Settings</a>
                     </li>
                 </ul>
             </div>
@@ -143,37 +127,44 @@
     <!-- Main Content -->
     <div class="container mt-5">
         <div class="row">
-            <!-- Profile Summary -->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Profile Summary
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Blood Type:</strong> {{user.blood_group}} </p>
-                        <p><strong>Location:</strong> {{user.location}}</p>
-                        <p><strong>Total Donations:</strong> 5</p>
-                        <p><strong>Stars:</strong> ⭐⭐⭐⭐☆</p>
-                        <p><strong>Badges:</strong></p>
-                        <span class="badge badge-custom">5 Donations</span>
-                        <span class="badge badge-custom">Life Saver</span>
-                    </div>
-                </div>
-            </div>
+   <!-- Profile Summary -->
+<div class="col-lg-3 col-md-6 mb-4">
+    <div class="card text-center">
+        <div class="card-header">
+            Profile Summary
+        </div>
+        <div class="card-body">
+            <p><strong>Blood Type:</strong> {{ user.blood_group }} </p>
+            <p><strong>Location:</strong> {{ user.location }}</p>
+            <p><strong>Total Donations:</strong> {{ donations.count }} </p>
+            <p><strong>Stars:</strong> {{ user.stars }} ⭐</p>
+            <p><strong>Badges:</strong></p>
+            {% for badge in user.badges.all %}
+                <span class="badge badge-custom">{{ badge.name }}</span>
+            {% empty %}
+                <span>No badges earned yet.</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-            <!-- Next Donation Eligibility -->
-            <div class="col-lg-9 col-md-6 mb-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Next Donation Eligibility
-                    </div>
-                    <div class="card-body">
-                        <h5>You are eligible to donate blood in:</h5>
-                        <h1>30 Days</h1>
-                        <a href="#" class="btn btn-custom">Schedule Next Donation</a>
-                    </div>
-                </div>
-            </div>
+
+<!-- Next Donation Eligibility -->
+<div class="col-lg-9 col-md-6 mb-4">
+    <div class="card text-center">
+        <div class="card-header">
+            Next Donation Eligibility
+        </div>
+        <div class="card-body">
+            <h5>{{ message }}</h5>
+            {% if remaining_days is not None %}
+                <h1>{{ remaining_days }} Days</h1>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
         </div>
 
         <!-- Donation History -->

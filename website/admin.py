@@ -9,10 +9,42 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'phone_number',
-                    'blood_group', 'location', 'user_type')
+    list_display = (
+        'username',
+        'email',
+        'phone_number',
+        'blood_group',
+        'location',
+        'user_type',
+        'last_donation'
+    )
     search_fields = ('username', 'email', 'phone_number')
     list_filter = ('user_type', 'blood_group')
+
+    # Using fieldsets to organize fields
+    fieldsets = (
+        ('User Information', {
+            'fields': (
+                'username',
+                'email',
+                'phone_number',
+                'blood_group',
+                'location',
+                'user_type',
+                'last_donation'
+            )
+        }),
+        ('Advanced Options', {
+            'classes': ('collapse',),  # Makes this section collapsible
+            'fields': ('badges', 'stars', 'profile'),
+        }),
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        # Set last_donation to read-only in the admin interface
+        if obj:
+            return ['last_donation']
+        return super().get_readonly_fields(request, obj)
 
 
 @admin.register(BloodRequest)
@@ -63,5 +95,6 @@ class CampaignAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'location')
     search_fields = ('title', 'location')
     date_hierarchy = 'date'
+
 
 admin.site.register(Gallery)
