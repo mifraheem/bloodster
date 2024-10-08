@@ -1,16 +1,17 @@
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from website.controllers import basic_controller, user_controller, dashboards, bloodRequest, chat_controller
 urlpatterns = [
+    path('jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
 
     # basic urls
     path('', basic_controller.home, name="home"),
     path('campaigns/', basic_controller.campaign_list, name='campaign_list'),
-    path('gallery/', basic_controller.full_gallery, name='full_gallery'),  
+    path('gallery/', basic_controller.full_gallery, name='full_gallery'),
 
 
     # user urls
@@ -53,5 +54,6 @@ urlpatterns = [
     path('fetch_all_messages/<str:chat_user>/',
          chat_controller.fetch_all_messages, name='fetch_all_messages'),
 ]
-if settings.DEBUG:  
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

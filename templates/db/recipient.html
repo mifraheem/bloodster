@@ -94,29 +94,13 @@
             </button>
             <div class="collapse navbar-collapse" id="recipientNavbar">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Request Blood</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">My Requests</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Available Donors</a>
-                    </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'chat' %}">Messages</a>
                     </li>
+                
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Health Resources</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile Settings</a>
+                        <a class="nav-link" href="{% url 'update_profile' %}">Profile Settings</a>
                     </li>
                 </ul>
             </div>
@@ -125,7 +109,7 @@
 
     <!-- Header -->
     <header class="dashboard-header">
-        <h1>Welcome, Recipient Name</h1>
+        <h1>Welcome, {{user.username}}</h1>
         <p>We're here to help you find the blood you need.</p>
     </header>
 
@@ -151,18 +135,19 @@
         <!-- Profile Summary & Request Blood -->
         <div class="row mb-4">
             <!-- Profile Summary -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Profile Summary
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Blood Type:</strong> B-</p>
-                        <p><strong>Location:</strong> City Name</p>
-                        <p><strong>Requests Made:</strong> 3</p>
-                    </div>
-                </div>
+            <!-- Profile Summary -->
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card text-center">
+            <div class="card-header">
+                Profile Summary
             </div>
+            <div class="card-body">
+                <p><strong>Blood Type:</strong> {{ request.user.blood_group }}</p>
+                <p><strong>Location:</strong> {{ request.user.location }}</p>
+                <p><strong>Requests Made:</strong> {{ requests_made_count }}</p>
+            </div>
+        </div>
+    </div>
 
             <!-- Request Blood -->
             <div class="col-lg-8 col-md-6 mb-4">
