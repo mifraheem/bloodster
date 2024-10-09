@@ -20,3 +20,16 @@ def home(request):
         'latest_campaigns': latest_campaigns,
         'gallery_images': gallery_images
     })
+
+
+def contect_message(request):
+    if request.method == 'POST':
+        data = request.POST
+        name = data.get('name')
+        phone = data.get('phone')
+        email = data.get('email')
+        message = data.get('message')
+        QuickMessage.objects.create(
+            name=name, mobile_no=phone, email=email, message=message)
+        messages.success(request, "Your Message has been Saved.")
+    return redirect('home')

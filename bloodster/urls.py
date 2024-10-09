@@ -12,6 +12,7 @@ urlpatterns = [
     path('', basic_controller.home, name="home"),
     path('campaigns/', basic_controller.campaign_list, name='campaign_list'),
     path('gallery/', basic_controller.full_gallery, name='full_gallery'),
+    path('contact-message', basic_controller.contect_message, name='contact_message'),
 
 
     # user urls

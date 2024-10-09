@@ -139,8 +139,8 @@
                         <div class="icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="detail">
-                            <p>Kotli, AJ&K</p>
+                        <div class="detail" id="detail" style="display: flex; justify-content: center; align-items: center">
+                            <p style="margin-bottom: 5px;">Kotli, AJ&K</p>
                         </div>
                     </div>
                     <div class="address-row">
@@ -156,7 +156,7 @@
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="detail">
-                            <p>+91 9751791203 <br> +91 9159669599</p>
+                            <p>+92 9751791203 <br> +92 9159669599</p>
                         </div>
                     </div>
                 </div>
@@ -179,12 +179,13 @@
                             <h4>Quick Message</h4>
                         </div>
                         <div class="form-body">
-                            <form action="" method='post'> 
-                                <input type="text" placeholder="Enter Name" class="form-control">
-                                <input type="text" placeholder="Enter Mobile no" class="form-control">
-                                <input type="text" placeholder="Enter Email Address" class="form-control">
-                                <input type="text" placeholder="Your Message" class="form-control">
-                                <button class="btn btn-sm btn-danger w-100">Send Request</button>
+                            <form action="{% url 'contact_message' %}" method='post'> 
+                                {% csrf_token %}
+                                <input type="text" name='name' placeholder="Enter Name" class="form-control">
+                                <input type="text" name='phone' placeholder="Enter Mobile no" class="form-control">
+                                <input type="text" name='email' placeholder="Enter Email Address" class="form-control">
+                                <input type="text" name='message' placeholder="Your Message" class="form-control">
+                                <button type="submit" class="btn btn-sm btn-danger w-100">Send Message</button>
                             </form>
                         </div>
                     </div>
@@ -197,11 +198,9 @@
                     </div>
                     <div class="col-lg-4 col-md-6 socila-link">
                         <ul>
-                            <li><a><i class="fab fa-github"></i></a></li>
-                            <li><a><i class="fab fa-google-plus-g"></i></a></li>
-                            <li><a><i class="fab fa-pinterest-p"></i></a></li>
-                            <li><a><i class="fab fa-twitter"></i></a></li>
-                            <li><a><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a><i class="fab fa-instagram"></i></a></li>
+                            <li><a><i class="fab fa-facebook"></i></a></li>
+                            <i class="fa-brands fa-facebook-f"></i>
                         </ul>
                     </div>
                 </div>
