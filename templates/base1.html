@@ -179,13 +179,14 @@
                             <h4>Quick Message</h4>
                         </div>
                         <div class="form-body">
-                            <form action="{% url 'contact_message' %}" method='post'> 
+                            <form action="{% url 'contact_message' %}" method='post' id="contactForm"> 
                                 {% csrf_token %}
-                                <input type="text" name='name' placeholder="Enter Name" class="form-control">
-                                <input type="text" name='phone' placeholder="Enter Mobile no" class="form-control">
-                                <input type="text" name='email' placeholder="Enter Email Address" class="form-control">
-                                <input type="text" name='message' placeholder="Your Message" class="form-control">
+                                <input type="text" id="quick_name" name='name' placeholder="Enter Name" class="form-control">
+                                <input type="text" id="quick_phone" name='phone' placeholder="Enter Mobile no" class="form-control">
+                                <input type="text" id="quick_email" name='email' placeholder="Enter Email Address" class="form-control">
+                                <input type="text" id="quick_message" name='message' placeholder="Your Message" class="form-control">
                                 <button type="submit" class="btn btn-sm btn-danger w-100">Send Message</button>
+                                <p id="contact_error" class="red text-danger text-center mt-2"></p>
                             </form>
                         </div>
                     </div>
@@ -208,8 +209,43 @@
         </div>
     </footer>
     
-    
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let name = document.getElementById('quick_name').value.trim();
+            let phone = document.getElementById('quick_phone').value.trim();
+            let email = document.getElementById('quick_email').value.trim();
+            let message = document.getElementById('quick_message').value.trim();
+            let e_box = document.getElementById('contact_error');
+            let nameRegex = /^[A-Za-z\s]{4,}$/;
+            if (!nameRegex.test(name)) {
+                e_box.innerText = "Please enter your full name.";
+                return;
+            }
+        
+            let phoneRegex = /^[0-9]{10,14}$/;
+            if (!phoneRegex.test(phone)) {
+                e_box.innerText = "Please enter a valid phone number.";
+                return;
+            }
+        
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e_box.innerText = "Please enter a valid email address.";
+                return;
+            }
+        
+            if (message.length < 10) {
+                e_box.innerText = "Write down your full message.";
+                return;
+            }
+            
+            this.submit();
+        });
+        </script>
+        {% block js %}{% endblock js %}
 </body>
+</script>
 
     <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'assets/js/popper.min.js' %}"></script>

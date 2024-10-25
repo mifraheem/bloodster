@@ -79,7 +79,7 @@
         <div class="form-image mt-5 mx-5" style="background: url('{% static "assets/images/gallery/g3.jpg" %}') no-repeat center center; background-size: cover; height: 40vh;"></div>
         <div class="form-content">
             <h2>Login</h2>
-            <form method="post" action="{% url 'login' %}">
+            <form method="post" action="{% url 'login' %}" id="login_form">
                 {% csrf_token %}
            
                 <div class="form-group">
@@ -92,7 +92,40 @@
                 </div>
                 <button type="submit" class="btn btn-custom">Login</button> <span style="margin-left: 10px;">Don't have an account? <a class="m-3" href="/register">Signup</a></span>
             </form>
+            <p id="login_error" class="text-danger text-center"></p>
         </div>
     </div>
 </div>
+
 {% endblock content %}
+
+{% block js %}
+<script>
+    document.getElementById('login_form').addEventListener('submit', function(event) {
+        // Prevent form submission
+        event.preventDefault();
+        
+        // Get form values
+        let email = document.getElementById('email').value.trim();
+        let password = document.getElementById('password').value.trim();
+        let errorBox = document.getElementById('login_error');
+    
+        // Validate email format
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            errorBox.innerText = "Please enter a valid email address.";
+            return;
+        }
+    
+        // Validate password (at least 8 characters)
+        if (password.length < 8) {
+            errorBox.innerText = "Password must be at least 4 characters long.";
+            return;
+        }
+        
+        this.submit();
+    });
+    </script>
+    
+    
+{% endblock js %}

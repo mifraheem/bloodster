@@ -76,7 +76,7 @@
         <div class="form-image mt-5 mx-5" style="background: url('{% static "assets/images/gallery/g2.jpg" %}') no-repeat center center; background-size: cover; height: 40vh;"></div>
         <div class="form-content">
             <h2>Register</h2>
-            <form method="post" action="{% url 'register' %}">
+            <form method="post" action="{% url 'register' %}" id="register_form">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -98,9 +98,65 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
+                <div class="form-group">
+                    <label for="password">Confirm Password</label>
+                    <input type="password" class="form-control" id="password2" name="password" required>
+                </div>
                 <button type="submit" class="btn btn-custom">Register</button>  <span style="margin-left: 10px;">Already have an account? <a class="m-3" href="/login" class="text-primary">Login</a></span>
             </form>
+            <p id="register_error" class="text-danger text-center"></p>
         </div>
     </div>
 </div>
 {% endblock content %}
+
+{% block js %}
+<script>
+    document.getElementById('register_form').addEventListener('submit', function(event) {
+        // Prevent form submission
+        event.preventDefault();
+        
+        // Get form values
+        let username = document.getElementById('username').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let userType = document.getElementById('user_type').value;
+        let password = document.getElementById('password').value.trim();
+        let password2 = document.getElementById('password2').value.trim();
+        let errorBox = document.getElementById('register_error');
+        
+        // Validate username (alphanumeric, at least 4 characters)
+        let usernameRegex = /^[A-Za-z0-9]{4,}$/;
+        if (!usernameRegex.test(username)) {
+            errorBox.innerText = "Username must be alphanumeric and at least 4 characters long.";
+            return;
+        }
+    
+        // Validate email format
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            errorBox.innerText = "Please enter a valid email address.";
+            return;
+        }
+    
+        // Validate user type selection
+        if (userType === "") {
+            errorBox.innerText = "Please select an account type.";
+            return;
+        }
+    
+        // Validate password (at least 8 characters)
+        if (password.length < 4) {
+            errorBox.innerText = "Password must be at least 4 characters long.";
+            return;
+        }
+        if (password !== password2) {
+            errorBox.innerText = "Passwords doesn't match.";
+            return;
+        }
+        // If all validations pass, submit the form
+        this.submit();
+    });
+    </script>
+    
+    
+{% endblock js %}
