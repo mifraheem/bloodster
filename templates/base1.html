@@ -85,7 +85,7 @@
                                             <a class="nav-link" href="/#campaigns">Campaigns</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/#contact">Contact</a>
+                                            <a class="nav-link" href="#">Contact</a>
                                         </li>
                                         {% if user.is_authenticated %}
                                             {% if user.user_type == 'recipient' %}
@@ -172,24 +172,6 @@
                     </ul>
                     </div>
                   
-                </div>
-                <div class="col-lg-4 col-md-12 footer-form">
-                    <div class="form-card">
-                        <div class="form-title">
-                            <h4>Quick Message</h4>
-                        </div>
-                        <div class="form-body">
-                            <form action="{% url 'contact_message' %}" method='post' id="contactForm"> 
-                                {% csrf_token %}
-                                <input type="text" id="quick_name" name='name' placeholder="Enter Name" class="form-control">
-                                <input type="text" id="quick_phone" name='phone' placeholder="Enter Mobile no" class="form-control">
-                                <input type="text" id="quick_email" name='email' placeholder="Enter Email Address" class="form-control">
-                                <input type="text" id="quick_message" name='message' placeholder="Your Message" class="form-control">
-                                <button type="submit" class="btn btn-sm btn-danger w-100">Send Message</button>
-                                <p id="contact_error" class="red text-danger text-center mt-2"></p>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="footer-copy">
