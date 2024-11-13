@@ -95,6 +95,23 @@ def handle_logout(request):
     messages.info(request, "You're Logged Out")
     return redirect('home')
 
+@csrf_exempt
+def reset_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        new_password = request.POST.get('new_password')
+
+        try:
+            user = User.objects.get(email=email)
+            user.password = make_password(new_password)
+            user.save()
+            messages.success(request, "Password reset successful! Please log in with your new password.")
+            return redirect('login')
+        except User.DoesNotExist:
+            messages.error(request, "Email not found. Please try again.")
+            return redirect('reset_password')
+
+    return render(request, 'web/reset_password.html')
 
 @login_required
 def update_profile(request):

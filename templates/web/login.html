@@ -92,6 +92,9 @@
                 </div>
                 <button type="submit" class="btn btn-custom">Login</button> <span style="margin-left: 10px;">Don't have an account? <a class="m-3" href="/register">Signup</a></span>
             </form>
+            <div class="text-center mt-3">
+                <a href="{% url 'reset_password' %}">Forgot Password?</a>
+            </div>
             <p id="login_error" class="text-danger text-center"></p>
         </div>
     </div>
