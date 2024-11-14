@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from ..models import BloodRequest, BloodDonation, User
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 @login_required
 def create_blood_request(request):
@@ -16,18 +17,87 @@ def create_blood_request(request):
         additional_info = request.POST.get('additional_info')
 
         # Create the BloodRequest instance
-        BloodRequest.objects.create(
+        new_request = BloodRequest.objects.create(
             recipient=request.user,
             requested_blood_group=requested_blood_group,
             urgency=urgency,
             location=location,
             additional_info=additional_info
         )
-        print('i got your request')
-        messages.success(request, "Your Request has been Saved.")
+
+        # Notify all donors
+        donors = User.objects.filter(user_type="donor")
+        donor_emails = [donor.email for donor in donors if donor.email]
+
+        if donor_emails:
+            send_mail(
+                subject="New Blood Request",
+                message=(
+                    f"A new blood request has been created:\n\n"
+                    f"Blood Group: {requested_blood_group}\n"
+                    f"Urgency: {urgency}\n"
+                    f"Location: {location}\n\n"
+                    "Please log in to your account if you wish to fulfill this request."
+                ),
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=donor_emails,
+                fail_silently=False,
+            )
+
+        messages.success(request, "Your Request has been Saved and notified to donors.")
         return redirect('recipient-dashboard')
     else:
         messages.warning(request, "Bad request")
+        return redirect('recipient-dashboard')
+
+@login_required
+def accept_blood_request(request, request_id):
+    if request.user.user_type != "donor":
+        messages.error(request, "You're not authorized to accept blood requests.")
+        return redirect('home')
+
+    blood_request = get_object_or_404(BloodRequest, id=request_id)
+
+    if blood_request.status != 'pending':
+        messages.error(request, "This blood request is no longer available.")
+        return redirect('donor-dashboard')
+
+    existing_pending_requests = BloodRequest.objects.filter(
+        fulfilled_by=request.user, status='pending'
+    )
+    if existing_pending_requests.exists():
+        messages.error(request, "You cannot accept this request because you have pending requests that you have not fulfilled.")
+        return redirect('donor-dashboard')
+
+    if request.user.last_donation:
+        if timezone.now() - request.user.last_donation < timedelta(days=60):
+            messages.error(request, "You cannot accept this request because your last donation was within the last 60 days.")
+            return redirect('donor-dashboard')
+
+    blood_request.fulfilled_by = request.user
+    blood_request.status = 'in_progress'
+    blood_request.save()
+
+    messages.success(request, "You have successfully accepted the blood request.")
+
+    # Notify all donors that the request has been fulfilled
+    donors = User.objects.filter(user_type="donor").exclude(id=request.user.id)
+    donor_emails = [donor.email for donor in donors if donor.email]
+
+    if donor_emails:
+        send_mail(
+            subject="Blood Request Fulfilled",
+            message=(
+                f"The blood request for blood group {blood_request.requested_blood_group} at {blood_request.location} "
+                "has been accepted and is now in progress. Thank you for your willingness to help!"
+            ),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=donor_emails,
+            fail_silently=False,
+        )
+
+    return redirect('donor-dashboard')
+
 
 
 @login_required
@@ -60,45 +130,45 @@ def view_request(request, id):
     return render(request, 'web/request.html', context)
 
 
-@login_required
-def accept_blood_request(request, request_id):
-    if request.user.user_type != "donor":
-        messages.error(
-            request, "You're not authorized to accept blood requests.")
-        return redirect('home')
+# @login_required
+# def accept_blood_request(request, request_id):
+#     if request.user.user_type != "donor":
+#         messages.error(
+#             request, "You're not authorized to accept blood requests.")
+#         return redirect('home')
 
-    # Get the blood request object
-    blood_request = get_object_or_404(BloodRequest, id=request_id)
+#     # Get the blood request object
+#     blood_request = get_object_or_404(BloodRequest, id=request_id)
 
-    # Ensure the request is still pending or available
-    if blood_request.status != 'pending':
-        messages.error(request, "This blood request is no longer available.")
-        return redirect('donor-dashboard')
+#     # Ensure the request is still pending or available
+#     if blood_request.status != 'pending':
+#         messages.error(request, "This blood request is no longer available.")
+#         return redirect('donor-dashboard')
 
-    # Check for existing pending requests by the donor
-    existing_pending_requests = BloodRequest.objects.filter(
-        fulfilled_by=request.user, status='pending'
-    )
-    if existing_pending_requests.exists():
-        messages.error(
-            request, "You cannot accept this request because you have pending requests that you have not fulfilled.")
-        return redirect('donor-dashboard')
+#     # Check for existing pending requests by the donor
+#     existing_pending_requests = BloodRequest.objects.filter(
+#         fulfilled_by=request.user, status='pending'
+#     )
+#     if existing_pending_requests.exists():
+#         messages.error(
+#             request, "You cannot accept this request because you have pending requests that you have not fulfilled.")
+#         return redirect('donor-dashboard')
 
-    # Check if the last donation was within the last 60 days
-    if request.user.last_donation:
-        if timezone.now() - request.user.last_donation < timedelta(days=60):
-            messages.error(
-                request, "You cannot accept this request because your last donation was within the last 60 days.")
-            return redirect('donor-dashboard')
+#     # Check if the last donation was within the last 60 days
+#     if request.user.last_donation:
+#         if timezone.now() - request.user.last_donation < timedelta(days=60):
+#             messages.error(
+#                 request, "You cannot accept this request because your last donation was within the last 60 days.")
+#             return redirect('donor-dashboard')
 
-    # Assign the donor to the fulfilled_by field and update the status
-    blood_request.fulfilled_by = request.user
-    blood_request.status = 'in_progress'
-    blood_request.save()
+#     # Assign the donor to the fulfilled_by field and update the status
+#     blood_request.fulfilled_by = request.user
+#     blood_request.status = 'in_progress'
+#     blood_request.save()
 
-    messages.success(
-        request, "You have successfully accepted the blood request.")
-    return redirect('donor-dashboard')
+#     messages.success(
+#         request, "You have successfully accepted the blood request.")
+#     return redirect('donor-dashboard')
 
 
 @login_required
