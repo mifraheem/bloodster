@@ -1,7 +1,216 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
-  <div class="slider-wrap">
+
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    :root {
+        --primary: #d32f2f;
+        --primary-dark: #b71c1c;
+        --primary-light: #ffebee;
+        --accent: #ffc107;
+        --text-dark: #212121;
+        --text-medium: #555555;
+        --white: #ffffff;
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+        --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+        --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+    }
+
+    /* Slider Enhancements */
+    .slider-wrap {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slider_item_container {
+        background-size: cover !important;
+        background-position: center !important;
+        height: 100vh;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        animation: fadeIn 1.5s ease;
+    }
+
+    .slider-content h3 {
+        font-size: 1.8rem;
+        color: var(--accent);
+        animation: fadeInUp 1s ease 0.5s forwards;
+        opacity: 0;
+    }
+
+    .slider-content h2 {
+        font-size: 4rem;
+        font-weight: 800;
+        line-height: 1.2;
+        color: white;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        animation: fadeInUp 1s ease 0.8s forwards;
+        opacity: 0;
+    }
+
+    .slider-content .btn {
+        animation: fadeInUp 1s ease 1.2s forwards;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .slider-content .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(211,47,47,0.4);
+    }
+
+    /* About Section */
+    .about-us-container, .about-img {
+        animation: fadeInLeft 1.2s ease forwards;
+    }
+
+    .about-img img {
+        transition: transform 0.6s ease;
+    }
+
+    .about-img:hover img {
+        transform: scale(1.05);
+    }
+
+    .venobox i {
+        transition: all 0.4s ease;
+    }
+
+    .venobox:hover i {
+        transform: scale(1.3);
+    }
+
+    /* Testimonials */
+    .testimonial-container .testimony-layout-1 {
+        animation: fadeInUp 1s ease;
+    }
+
+    .testimony-layout-1 img {
+        transition: transform 0.4s ease;
+    }
+
+    .testimony-layout-1:hover img {
+        transform: scale(1.15) rotate(5deg);
+    }
+
+    /* Campaigns */
+    .event-layout-1 {
+        transition: all 0.4s ease;
+        overflow: hidden;
+    }
+
+    .event-layout-1:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .event-layout-1 img {
+        transition: transform 0.6s ease;
+    }
+
+    .event-layout-1:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Counters */
+    .counter-block-1 {
+        animation: fadeInUp 1s ease;
+        transition: all 0.4s ease;
+    }
+
+    .counter-block-1:hover {
+        transform: translateY(-8px);
+    }
+
+    .counter-block-1 i {
+        font-size: 3rem;
+        color: var(--primary);
+        animation: pulse 2s infinite;
+    }
+
+    /* Team */
+    .team-layout-1 {
+        transition: all 0.4s ease;
+    }
+
+    .team-layout-1:hover {
+        transform: translateY(-10px);
+    }
+
+    .team-member img {
+        transition: transform 0.6s ease;
+    }
+
+    .team-layout-1:hover .team-member img {
+        transform: scale(1.1);
+    }
+
+    .team-social-share a {
+        transition: all 0.4s ease;
+    }
+
+    .team-social-share a:hover {
+        transform: translateY(-5px) rotate(15deg);
+        background: var(--accent);
+        color: var(--text-dark);
+    }
+
+    /* Gallery */
+    .gallery-img img {
+        transition: transform 0.6s ease;
+    }
+
+    .gallery-container:hover .gallery-img img {
+        transform: scale(1.15);
+    }
+
+    /* CTA Section */
+    .cta-section-1 {
+        animation: fadeInUp 1.2s ease;
+    }
+
+    .cta-section-1 .btn:hover {
+        transform: scale(1.1);
+    }
+
+    /* General Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .slider-content h2 {
+            font-size: 2.8rem;
+        }
+        .slider-content h3 {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="slider-wrap">
     <div id="slider_1" class="owl-carousel" data-nav="true" data-dots="false" data-autoplay="true" data-autoplaytimeout="17000">
 
         <div class="slider_item_container" data-bg_img="{% static 'mages/home_1_slider_1.jpg' %}" data-bg_color="#555555" data-bg_opacity="0.0">
@@ -10,19 +219,18 @@
                     <div class="container text-left">
                         <div class="row">
                             <div class="slider-bg">                                    
-                                <div class="col-sm-12 wow zoomInUp" data-wow-duration="1s">  
-                                    
-                                        <h3>Donate blood, save life!</h3>
-                                        <h2>
-                                            YOUR BLOOD  
-                                            <br>
-                                            CAN BRING SMILE  
-                                            <br />
-                                            IN OTHER PERSON'S FACE
-                                        </h2>
-                                        <a href="#" class="btn btn-theme margin-top-24">Donate Now</a>
-                                        <a href="#" class="btn btn-theme btn-theme-invert margin-top-24">CALL: 411-009-872-333</a>
-                                    </div>                                      
+                                <div class="col-sm-12">  
+                                    <h3>Donate blood, save life!</h3>
+                                    <h2>
+                                        YOUR BLOOD  
+                                        <br>
+                                        CAN BRING SMILE  
+                                        <br />
+                                        IN OTHER PERSON'S FACE
+                                    </h2>
+                                    <a href="#" class="btn btn-theme margin-top-24">Donate Now</a>
+                                    <a href="#" class="btn btn-theme btn-theme-invert margin-top-24">CALL: 411-009-872-333</a>
+                                </div>                                      
                             </div> 
                         </div> 
                     </div> 
@@ -30,57 +238,45 @@
             </div> 
         </div>
 
-        <div class="slider_item_container" data-bg_img="{% static 'images/home_1_slider_2.jpg' %}" data-bg_color="#555555" data-bg_opacity="0.0" >
+        <div class="slider_item_container" data-bg_img="{% static 'images/home_1_slider_2.jpg' %}" data-bg_color="#555555" data-bg_opacity="0.0">
             <div class="item">
                 <div class="slider-content">
                     <div class="container text-left">
                         <div class="row">
-                            <div class="slider-bg" data-animation-in="zoomInUp" data-animation-out="zoomInDown">                                    
-                                <div class="col-sm-12 wow fadeInDown" data-wow-duration="1s">
-                                    
+                            <div class="slider-bg">                                    
+                                <div class="col-sm-12">
                                     <h3>Donate blood, save life!</h3>
-                                        <h2>
-                                            DONATE BLOOD
-                                            <br>
-                                            AND INSPIRE OTHERS.
-                                        </h2>
-                                        <a href="#" class="btn btn-theme margin-top-24">Donate Now</a>
+                                    <h2>
+                                        DONATE BLOOD
+                                        <br>
+                                        AND INSPIRE OTHERS.
+                                    </h2>
+                                    <a href="#" class="btn btn-theme margin-top-24">Donate Now</a>
                                 </div>                                            
-                            </div> <!-- end .col-sm-12  -->
-                        </div> <!-- end .row  -->
-                    </div><!-- end .container -->
-                </div> <!--  end .slider-content -->
-            </div> <!-- end .item  -->
-        </div> <!-- end .slider_item_container  -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    </div> <!-- end .slider_1  -->
-</div> <!-- end .slider-wrap.  -->
+    </div>
+</div>
 
-<!--  FEATURED ABOUT US SECTION-->
-
+<!-- FEATURED ABOUT US SECTION -->
 <section class="section-content-block">
-
     <div class="container">
-        
         <div class="row">
-
             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                
                 <div class="about-us-container theme-custom-box-shadow">
-
                     <div class="row section-heading-wrapper margin-bottom-11">
-
                         <div class="col-lg-12 col-md-12 col-sm-12 text-left no-img-separator">
                             <h2><strong>Who We Are?</strong></h2>
                             <span class="heading-separator heading-separator-horizontal"></span>
-                        </div> <!-- end .col-sm-10  --> 
-
+                        </div>
                     </div>
-
                     <div class="about-details"> 
-
                         <p>Blood Buddies is a public donation center with blood donation members in the changing health care system.</p>
-
                         <ul class="custom-bullet-list">
                             <li>Specialist blood donors and clinical supervision.</li>
                             <li>Increasing communication with our members.</li>
@@ -88,104 +284,89 @@
                             <li>Examine critically to ensure alignment.</li>
                             <li>The extra care of a multi-disciplinary team.</li>
                         </ul>
-
-                    </div> <!--  end .about-details -->  
-
+                    </div>
                 </div>
-
-            </div> <!--  end .col-lg-6 col-md-6 col-sm-12 col-xs-12 -->  
-
+            </div>
 
             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-
                 <figure class="about-img theme-custom-box-shadow">
-                    <a class="venobox wow bounceIn" data-vbtype="video" data-autoplay="true" href="https://www.youtube.com/watch?v=nrJtHemSPW4"><i class="fa fa-play"></i></a>                                
+                    <a class="venobox" data-vbtype="video" data-autoplay="true" href="https://www.youtube.com/watch?v=nrJtHemSPW4"><i class="fa fa-play"></i></a>                                
                     <img src="{% static 'images/about_feat_bg.jpg' %}" alt="about" />
-                </figure> <!-- end .cause-img  -->
+                </figure>
+            </div>
+        </div>
+    </div>
+</section>
 
-            </div> <!--  end .col-lg-6 col-md-6 col-sm-12 col-xs-12  -->                    
-
-        </div> <!--  end .row  -->
+<!-- SECTION TESTIMONIAL -->
+<section class="section-content-block section-custom-bg" data-bg_img="{% static 'images/testimony_feat_bg.jpg' %}" data-bg_size='cover' data-bg_position='top center' data-bg_opacity="0">
+    <div class="container margin-top-80">
+        <div class="row section-heading-wrapper-alt">
+            <div class="col-md-12 col-sm-12 text-center no-img-separator">
+                <h4>Awesome Words From Members</h4>
+                <span class="heading-separator heading-separator-horizontal"></span>
+                <h2 class="extra-large">JOIN WITH US AND SAVE LIFE</h2>
+            </div> 
+        </div>
     </div>
 
-</section> <!--  end .section-about-us -->
-
-        <!-- SECTION TESTIMONIAL   -->
-
-        <section class="section-content-block section-custom-bg" data-bg_img="{% static 'images/testimony_feat_bg.jpg' %}" data-bg_size='cover' data-bg_position='top center' data-bg_opacity="0">
-            <div class="container margin-top-80">
-                <div class="row section-heading-wrapper-alt">
-                    <div class="col-md-12 col-sm-12 text-center no-img-separator">
-                        <h4>Awesome Words From Members</h4>
-                        <span class="heading-separator heading-separator-horizontal"></span>
-                        <h2 class="extra-large">JOIN WITH US AND SAVE LIFE</h2>
-                    </div> 
-                </div>
-            </div>
-        
-            <div class="container theme-custom-box-shadow section-pure-white-bg margin-top-48 margin-bottom-48 wow fadeInUp">
-                <div class="row">
-                    <div class="col-lg-6 col-md-12 col-sm-12">
-                        <div class="testimonial-container owl-carousel text-left" data-items="1">
-                            <div class="col-md-12 col-sm-12">
-                                <div class="testimony-layout-1">
-                                    <h3 class="people-quote">Donor Opinion</h3>
-                                    <p class="testimony-text">
-                                        I proudly donate blood on a regular basis because it gives others something they desperately need to survive. Just knowing I can make a difference in someone else's life makes me feel great!
-                                    </p>
-                                    <img src="{% static 'images/user_1.jpg' %}" alt="" />
-                                    <h6>Brandon Munson</h6>
-                                    <span>CTO, Fulcrum Design, USA</span>
-                                </div>
-                            </div>
-        
-                            <div class="col-md-12 col-sm-12">
-                                <div class="testimony-layout-1">
-                                    <h3 class="people-quote">Donor Opinion</h3>
-                                    <p class="testimony-text">
-                                        I have been a donor since high school. Although I have not been a donor every year, I always want to give to the human race. I love to help others! Moreover it gives a real peace in my mind.
-                                    </p>
-                                    <img src="{% static 'images/user_2.jpg' %}" alt="" />
-                                    <h6>Munson Brandon</h6>
-                                    <span>CTO, Fulcrum Design, USA</span>
-                                </div>
-                            </div>
-        
-                            <div class="col-md-12 col-sm-12">
-                                <div class="testimony-layout-1">
-                                    <h3 class="people-quote">Recipient Opinion</h3>
-                                    <p class="testimony-text">
-                                        I wish I could tell you my donor how grateful I am for your selfless act. You gave me new life. We may be coworkers or schoolmates or just two in the same community. I'm very grateful to you.
-                                    </p>
-                                    <img src="{% static 'images/user_3.jpg' %}" alt="" />
-                                    <h6>Logan Munson</h6>
-                                    <span>CTO, Fulcrum Design, USA</span>
-                                </div>
-                            </div>
+    <div class="container theme-custom-box-shadow section-pure-white-bg margin-top-48 margin-bottom-48">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="testimonial-container owl-carousel text-left" data-items="1">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="testimony-layout-1">
+                            <h3 class="people-quote">Donor Opinion</h3>
+                            <p class="testimony-text">
+                                I proudly donate blood on a regular basis because it gives others something they desperately need to survive. Just knowing I can make a difference in someone else's life makes me feel great!
+                            </p>
+                            <img src="{% static 'images/user_1.jpg' %}" alt="" />
+                            <h6>Brandon Munson</h6>
+                            <span>CTO, Fulcrum Design, USA</span>
                         </div>
                     </div>
-        
-                    <div class="col-lg-6 hidden-md hidden-xs hidden-sm no-padding">
-                        <figure>
-                            <img src="{% static 'images/testimony_feat_img.jpg' %}" alt="" class="db" />
-                        </figure>
+
+                    <div class="col-md-12 col-sm-12">
+                        <div class="testimony-layout-1">
+                            <h3 class="people-quote">Donor Opinion</h3>
+                            <p class="testimony-text">
+                                I have been a donor since high school. Although I have not been a donor every year, I always want to give to the human race. I love to help others! Moreover it gives a real peace in my mind.
+                            </p>
+                            <img src="{% static 'images/user_2.jpg' %}" alt="" />
+                            <h6>Munson Brandon</h6>
+                            <span>CTO, Fulcrum Design, USA</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                        <div class="testimony-layout-1">
+                            <h3 class="people-quote">Recipient Opinion</h3>
+                            <p class="testimony-text">
+                                I wish I could tell you my donor how grateful I am for your selfless act. You gave me new life. We may be coworkers or schoolmates or just two in the same community. I'm very grateful to you.
+                            </p>
+                            <img src="{% static 'images/user_3.jpg' %}" alt="" />
+                            <h6>Logan Munson</h6>
+                            <span>CTO, Fulcrum Design, USA</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        
-  <!--  SECTION CAMPAIGNS   -->
-<section class="section-content-block section-pure-white-bg" >
 
+            <div class="col-lg-6 hidden-md hidden-xs hidden-sm no-padding">
+                <figure>
+                    <img src="{% static 'images/testimony_feat_img.jpg' %}" alt="" class="db" />
+                </figure>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION CAMPAIGNS -->
+<section class="section-content-block section-pure-white-bg">
     <div class="container">
-        
         <div class="row">
-            
             <div class="col-sm-12 col-md-5">
-
                 <div class="row section-heading-wrapper">
-
                     <div class="col-md-12 col-sm-12 text-left no-img-separator">
                         <h2>OUR CAMPAIGNS</h2>
                         <span class="heading-separator heading-separator-horizontal"></span>
@@ -194,18 +375,13 @@
                                 and visited thousands of other venues on various occasions.</small>
                         </h4>
                         <a class="btn btn-theme margin-top-32" href="#">Load All Campaigns</a>
-                    </div> <!-- end .col-sm-12  -->  
-
-                </div> <!-- end .row  -->
-
+                    </div>
+                </div>
             </div>
 
             <div class="col-sm-12 col-md-7">
-                
-                <div class="row wow fadeInRight">
-
+                <div class="row">
                     <div class="event-carousel owl-carousel" data-nav="false" data-dots="true" data-items="1">
-
                         <div class="col-md-6 col-sm-12">
                             <div class="event-layout-1 theme-custom-box-shadow clearfix"> 
                                 <figure class="event-img">
@@ -248,7 +424,7 @@
                             <div class="event-layout-1 theme-custom-box-shadow clearfix"> 
                                 <figure class="event-img">
                                     <a href="#">
-                                        <img src="{% static "images/event_4.jpg" %}" alt="">
+                                        <img src="{% static 'images/event_4.jpg' %}" alt="">
                                     </a>
                                 </figure>
                                 <div class="event-info"> 
@@ -281,432 +457,283 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>     
-                </div> 
-                
+                </div>
             </div>
-            
         </div>
-
-    </div> <!--  end .container  --> 
-
+    </div>
 </section>
 
-        
-        <!--  SECTION APPOINTMENT BOX -->
-        
-        <section class="section-content-block section-custom-bg section-custom-bg-extra-padding" data-bg_img='images/appointment_female_bg.jpg' data-bg_color='#000000' data-bg_opacity='0.1'>
-
-            <div class="container">
-                <div class="custom-empty-space" data-height="160px" data-class="col-sm-hidden"></div>
-            </div>
-
-        </section>
-
-        <!--  SECTION APPOINTMENT   -->
-
-        <section class="section-content-block section-secondary-bg">
-
-            <div class="container">
-
-                <div class="row">
-
-                    <div class="col-lg-6 col-md-6"> 
-                        
-                        <div class="row section-heading-wrapper">
-
-                            <div class="col-md-12 col-sm-12 text-left no-img-separator">
-                                <h4>Good To Know</h4>
-                                <span class="heading-separator heading-separator-horizontal"></span>
-                                <h2>Helpful Information
-                                </h2>
-
-                            </div> <!-- end .col-sm-10  --> 
-
-                        </div>
-
-                        <div class="about-details"> 
-
-                            <ul class="custom-bullet-list">
-                                <li>Maintain a healthy iron level by eating iron rich foods.</li>
-                                <li>Drink an extra 16 oz. of water prior to your donation.</li>
-                                <li>Avoid alcohol consumption before your blood donation.</li>
-                                <li>Remember to bring the donor card or national ID/Passport.</li>
-                                <li>Finally, Try to get a good night sound sleep after donation.</li>
-                            </ul>
-
-                        </div> <!--  end .about-details -->  
-               
-                    </div> <!--  end col-lg-6  -->
-
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 margin-top-appointment-reverse"> 
-
-                        <div class="appointment-form-wrapper theme-custom-box-shadow text-center clearfix wow zoomIn">
-                            <h3 class="join-heading join-heading-alt">Request Appointment</h3>
-                            <form class="appoinment-form"> 
-                                <div class="form-group col-md-6">
-                                    <input id="your_name" class="form-control" placeholder="Name" type="text">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input id="your_email" class="form-control" placeholder="Email" type="email">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input id="your_phone" class="form-control" placeholder="Phone" type="text">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="select-style">                                    
-                                        <select class="form-control" name="your_center">
-                                            <option>Donation Center</option>
-                                            <option>Los Angles</option>
-                                            <option>California</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <input id="your_date" class="form-control" placeholder="Date" type="text">
-                                </div>
-
-
-                                <div class="form-group col-md-6">
-                                    <input id="your_time" class="form-control" placeholder="Time" type="text">
-                                </div>
-
-                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                    <textarea id="textarea_message" class="form-control" rows="4" placeholder="Your Message..."></textarea>
-                                </div>         
-
-                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                    <button id="btn_submit" class="btn btn-theme" type="submit">Get Appointment</button>
-                                </div>
-
-                            </form>
-
-                        </div> <!-- end .appointment-form-wrapper  -->
-
-                    </div> <!--  end .col-lg-6 -->
-
-                </div> <!--  end .row  -->
-                
-                <div class="row wow fadeIn">
-
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-
-                        <div class="counter-block-1 text-center">
-
-                            <i class="fa fa-heartbeat icon"></i>
-                            <span class="counter">2578</span>                            
-                            <h4 class="text-capitalize">Success Smile</h4>
-
-                        </div>
-
-                    </div> <!--  end .col-lg-3  -->
-
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-
-                        <div class="counter-block-1 text-center">
-
-                            <i class="fa fa-stethoscope icon"></i>
-                            <span class="counter">3235</span>                            
-                            <h4 class="text-capitalize">Happy Donors</h4>
-
-                        </div>
-
-                    </div> <!--  end .col-lg-3  -->
-
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-
-                        <div class="counter-block-1 text-center">
-
-                            <i class="fa fa-users icon"></i>
-                            <span class="counter">3568</span>                             
-                            <h4 class="text-capitalize">Happy Recipient</h4>
-
-                        </div>
-
-                    </div> <!--  end .col-lg-3  -->
-
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-
-                        <div class="counter-block-1 text-center">
-
-                            <i class="fa fa-building icon"></i>
-                            <span class="counter">1364</span>                            
-                            <h4 class="text-capitalize">Total Awards</h4>
-
-                        </div>
-
-                    </div> <!--  end .col-lg-3  -->
-
-
-                </div> <!-- end row  -->
-
-            </div> <!--  end .container -->
-
-        </section>  <!--  end .appointment-section  -->
-        
-        <!-- SECTION TEAM   -->
-
-        <section class="section-content-block section-custom-bg" data-bg_img='images/team_feat_bg.jpg' data-bg_size='cover' data-bg_position='top center' data-bg_opacity="0">
-            
-            <div class="container margin-top-80">
-                <div class="row section-heading-wrapper-alt">
-
-                    <div class="col-md-12 col-sm-12 text-center no-img-separator">
-                        <h4>OUR VOLUNTEERS</h4>
-                        <span class="heading-separator heading-separator-horizontal"></span>
-                        <h2 class="extra-large">The volunteers who give their time and talents help to fulfill our mission.</h2>
-
-                    </div> <!-- end .col-sm-10  --> 
-
-                </div>
-            </div>
-
-            <div class="container margin-top-48 margin-bottom-48 wow fadeInLeft">
-                
-                <div class="row">
-
-                        <div class="col-md-4 col-sm-12">
-
-                            <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
-
-                                <figure class="team-member">
-                                    <a href="#" title="ALEXANDER GARY">
-                                        <img src="images/team_9.jpg" alt="ALEXANDER GARY"/>
-                                    </a>
-
-                                </figure> <!-- end. team-member  -->
-
-                                <article class="team-info">
-                                    <h3>ALEXANDER GARY</h3>                                   
-                                    <h4>Co-Founder</h4>
-                                </article>
-
-                                <div class="team-content">
-
-                                    <div class="team-social-share text-center clearfix">
-                                        <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
-                                        <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
-                                        <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
-                                        <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
-                                    </div> <!-- end .author-social-box  -->
-
-                                </div>                             
-
-                            </div> <!--  end team-layout-1 -->
-
-                        </div> <!--  end .col-md-4 col-sm-12  -->
-
-                        <div class="col-md-4 col-sm-12">
-
-                            <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
-
-                                <figure class="team-member">
-                                    <a href="#" title="MELISSA MUNOZ">
-                                        <img src="images/team_6.jpg" alt="MELISSA MUNOZ" />
-                                    </a>
-
-                                </figure> <!-- end. team-member  -->
-
-                                <article class="team-info">
-                                    <h3>MELISSA MUNOZ</h3>                                   
-                                    <h4>Founder</h4>
-                                </article>
-
-                                <div class="team-content">
-
-                                    <div class="team-social-share text-center clearfix">
-                                        <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
-                                        <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
-                                        <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
-                                        <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
-                                    </div> <!-- end .author-social-box  -->
-
-                                </div>                             
-
-                            </div> <!--  end team layout-1 -->
-
-                        </div> <!--  end .col-md-4 col-sm-12  -->
-
-                        <div class="col-md-4 col-sm-12">
-
-                            <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
-
-                                <figure class="team-member">
-                                    <a href="#" title="JOHN ABRAHAM">
-                                        <img src="images/team_7.jpg" alt="JOHN ABRAHAM" />
-                                    </a>                               
-
-                                </figure> <!-- end. team-member  -->
-
-                                <article class="team-info">
-                                    <h3>JOHN ABRAHAM</h3>                                   
-                                    <h4>Manager</h4>
-                                </article>
-                                <div class="team-content">
-
-                                    <div class="team-social-share text-center clearfix">
-                                        <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
-                                        <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
-                                        <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
-                                        <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
-                                    </div> <!-- end .author-social-box  -->
-
-                                </div>                             
-
-                            </div> <!--  end team-layout-1 -->
-
-                        </div> <!--  end .col-md-4 col-sm-12  -->  
-
-
-                    </div> <!-- end .row  --> 
-                    
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            <a class="btn btn-theme margin-top-24" href="#">Become A Volunteer</a>
-                        </div>
-                    </div>
-
-            </div> <!-- end .container  -->
-
-        </section>
-
-        <!--  SECTION GALLERY  -->
-
-        <section class="section-content-block section-pure-white-bg">
-
-            <div class="container">
-
+<!-- SECTION APPOINTMENT BOX -->
+<section class="section-content-block section-custom-bg section-custom-bg-extra-padding" data-bg_img='{% static "images/appointment_female_bg.jpg" %}' data-bg_color='#000000' data-bg_opacity='0.1'>
+    <div class="container">
+        <div class="custom-empty-space" data-height="160px" data-class="col-sm-hidden"></div>
+    </div>
+</section>
+
+<!-- SECTION APPOINTMENT -->
+<section class="section-content-block section-secondary-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6"> 
                 <div class="row section-heading-wrapper">
-
-                    <div class="col-md-12 col-sm-12 text-center no-img-separator">
-                        <h2>CAMPAIGN GALLERY</h2>
-                        <span class="heading-separator"></span>
-                        <h4>our prestigious voluntary work on campaigns by the team</h4>
-                    </div> <!-- end .col-sm-10  -->                      
-
-
-                </div> <!-- end .row  -->
-
-            </div> <!--  end .container -->
-
-            <div class="container wow fadeInUp">
-
-                <div class="row no-padding-gallery">
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box"  data-gall="myGallery" href="images/gallery_1.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="images/gallery_1.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a>
-
-                    </div><!-- end .col-sm-3  -->
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_2.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="images/gallery_2.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a> <!-- end .gallery-light-box  -->
-
-                    </div><!-- end .col-sm-3  -->
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box"  data-gall="myGallery" href="images/gallery_3.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="images/gallery_3.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a>
-
-                    </div><!-- end .col-sm-3  -->
-
-                </div> <!-- end .row  -->
-
-                <div class="row no-padding-gallery">
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_4.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="images/gallery_4.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a> <!-- end .gallery-light-box  -->
-
-                    </div><!-- end .col-sm-3  -->
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box"  data-gall="myGallery" href="images/gallery_5.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="static/images/gallery_5.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a>
-
-                    </div><!-- end .col-sm-3  -->
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-
-                        <a class="gallery-light-box" data-gall="myGallery" href="static/images/gallery_6.jpg">
-
-                            <figure class="gallery-img">
-
-                                <img src="static/images/gallery_6.jpg" alt="gallery image" />
-
-                            </figure> <!-- end .gallery-img  -->
-
-                        </a> <!-- end .gallery-light-box  -->
-
-                    </div><!-- end .col-sm-3  -->
-
-                </div> <!-- end .row  -->
-
-            </div><!-- end .container-fluid  -->
-
-        </section> <!-- end .section-content-block  -->
-
-        <!-- HIGHLIGHT CTA  -->  
-        
-        <section class="padding-bottom-100 padding-top-0">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="cta-section-1 section-secondary-bg text-center theme-custom-box-shadow">
-                            <h2 class="text-capitalize">Become A Part Of Great Work Today</h2>
-                            <p>
-                                You can give blood at any of our blood donation venues all over the world. 
-                                <br />
-                                We have total sixty thousands donor centers and visit thousands of other venues on various occasions.                            
-                            </p>
-                            <a class="btn btn-theme margin-top-24 wow bounceIn" href="#">JOIN WITH US</a>
-                        </div>
+                    <div class="col-md-12 col-sm-12 text-left no-img-separator">
+                        <h4>Good To Know</h4>
+                        <span class="heading-separator heading-separator-horizontal"></span>
+                        <h2>Helpful Information</h2>
                     </div>
                 </div>
+                <div class="about-details"> 
+                    <ul class="custom-bullet-list">
+                        <li>Maintain a healthy iron level by eating iron rich foods.</li>
+                        <li>Drink an extra 16 oz. of water prior to your donation.</li>
+                        <li>Avoid alcohol consumption before your blood donation.</li>
+                        <li>Remember to bring the donor card or national ID/Passport.</li>
+                        <li>Finally, Try to get a good night sound sleep after donation.</li>
+                    </ul>
+                </div>
             </div>
-        </section>
+
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 margin-top-appointment-reverse"> 
+                <div class="appointment-form-wrapper theme-custom-box-shadow text-center clearfix">
+                    <h3 class="join-heading join-heading-alt">Request Appointment</h3>
+                    <form class="appoinment-form"> 
+                        <div class="form-group col-md-6">
+                            <input id="your_name" class="form-control" placeholder="Name" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input id="your_email" class="form-control" placeholder="Email" type="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input id="your_phone" class="form-control" placeholder="Phone" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="select-style">                                    
+                                <select class="form-control" name="your_center">
+                                    <option>Donation Center</option>
+                                    <option>Los Angles</option>
+                                    <option>California</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input id="your_date" class="form-control" placeholder="Date" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input id="your_time" class="form-control" placeholder="Time" type="text">
+                        </div>
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <textarea id="textarea_message" class="form-control" rows="4" placeholder="Your Message..."></textarea>
+                        </div>         
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <button id="btn_submit" class="btn btn-theme" type="submit">Get Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="counter-block-1 text-center">
+                    <i class="fa fa-heartbeat icon"></i>
+                    <span class="counter">2578</span>                            
+                    <h4 class="text-capitalize">Success Smile</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="counter-block-1 text-center">
+                    <i class="fa fa-stethoscope icon"></i>
+                    <span class="counter">3235</span>                            
+                    <h4 class="text-capitalize">Happy Donors</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="counter-block-1 text-center">
+                    <i class="fa fa-users icon"></i>
+                    <span class="counter">3568</span>                             
+                    <h4 class="text-capitalize">Happy Recipient</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="counter-block-1 text-center">
+                    <i class="fa fa-building icon"></i>
+                    <span class="counter">1364</span>                            
+                    <h4 class="text-capitalize">Total Awards</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION TEAM -->
+<section class="section-content-block section-custom-bg" data-bg_img='{% static "images/team_feat_bg.jpg" %}' data-bg_size='cover' data-bg_position='top center' data-bg_opacity="0">
+    <div class="container margin-top-80">
+        <div class="row section-heading-wrapper-alt">
+            <div class="col-md-12 col-sm-12 text-center no-img-separator">
+                <h4>OUR VOLUNTEERS</h4>
+                <span class="heading-separator heading-separator-horizontal"></span>
+                <h2 class="extra-large">The volunteers who give their time and talents help to fulfill our mission.</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container margin-top-48 margin-bottom-48">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
+                    <figure class="team-member">
+                        <a href="#" title="ALEXANDER GARY">
+                            <img src="{% static 'images/team_9.jpg' %}" alt="ALEXANDER GARY"/>
+                        </a>
+                    </figure>
+                    <article class="team-info">
+                        <h3>ALEXANDER GARY</h3>                                   
+                        <h4>Co-Founder</h4>
+                    </article>
+                    <div class="team-content">
+                        <div class="team-social-share text-center clearfix">
+                            <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
+                            <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
+                            <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
+                            <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
+                        </div>
+                    </div>                             
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
+                    <figure class="team-member">
+                        <a href="#" title="MELISSA MUNOZ">
+                            <img src="{% static 'images/team_6.jpg' %}" alt="MELISSA MUNOZ" />
+                        </a>
+                    </figure>
+                    <article class="team-info">
+                        <h3>MELISSA MUNOZ</h3>                                   
+                        <h4>Founder</h4>
+                    </article>
+                    <div class="team-content">
+                        <div class="team-social-share text-center clearfix">
+                            <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
+                            <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
+                            <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
+                            <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
+                        </div>
+                    </div>                             
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                <div class="team-layout-1 theme-custom-box-shadow theme-custom-box-animation">
+                    <figure class="team-member">
+                        <a href="#" title="JOHN ABRAHAM">
+                            <img src="{% static 'images/team_7.jpg' %}" alt="JOHN ABRAHAM" />
+                        </a>                               
+                    </figure>
+                    <article class="team-info">
+                        <h3>JOHN ABRAHAM</h3>                                   
+                        <h4>Manager</h4>
+                    </article>
+                    <div class="team-content">
+                        <div class="team-social-share text-center clearfix">
+                            <a class="fa fa-facebook rectangle" href="#" title="Facebook"></a>
+                            <a class="fa fa-twitter rectangle" href="#" title="Twitter"></a>
+                            <a class="fa fa-google-plus rectangle" href="#" title="Google Plus"></a>
+                            <a class="fa fa-linkedin rectangle" href="#" title="Linkedin"></a>
+                        </div>
+                    </div>                             
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <a class="btn btn-theme margin-top-24" href="#">Become A Volunteer</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION GALLERY -->
+<section class="section-content-block section-pure-white-bg">
+    <div class="container">
+        <div class="row section-heading-wrapper">
+            <div class="col-md-12 col-sm-12 text-center no-img-separator">
+                <h2>CAMPAIGN GALLERY</h2>
+                <span class="heading-separator"></span>
+                <h4>our prestigious voluntary work on campaigns by the team</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row no-padding-gallery">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_1.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_1.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_2.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_2.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_3.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_3.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+        </div>
+
+        <div class="row no-padding-gallery">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_4.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_4.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_5.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_5.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
+                <a class="gallery-light-box" data-gall="myGallery" href="{% static 'images/gallery_6.jpg' %}">
+                    <figure class="gallery-img">
+                        <img src="{% static 'images/gallery_6.jpg' %}" alt="gallery image" />
+                    </figure>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HIGHLIGHT CTA -->
+<section class="padding-bottom-100 padding-top-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="cta-section-1 section-secondary-bg text-center theme-custom-box-shadow">
+                    <h2 class="text-capitalize">Become A Part Of Great Work Today</h2>
+                    <p>
+                        You can give blood at any of our blood donation venues all over the world. 
+                        <br />
+                        We have total sixty thousands donor centers and visit thousands of other venues on various occasions.                            
+                    </p>
+                    <a class="btn btn-theme margin-top-24" href="#">JOIN WITH US</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}

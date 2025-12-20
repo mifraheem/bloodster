@@ -1,347 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Chat Interface</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <title>Chat - {{ chat_user.username }} | Bloodster</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-dark: #b71c1c;
+            --primary-light: #ffebee;
+            --accent: #ffc107;
+            --text-dark: #212121;
+            --text-medium: #555555;
+            --text-light: #777777;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --border: #e0e0e0;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
         body {
-            background-color: #f5f5f5;
-            font-family: 'Poppins', sans-serif;
-            color: #333;
+            background: linear-gradient(to bottom, var(--primary-light), var(--bg-light));
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
         }
 
-        .header {
-            background-color: #dc3545;
+        .page-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 2rem 0;
+            padding: 50px 20px 40px;
             text-align: center;
-            border-bottom: 3px solid #bb2d3b;
+            position: relative;
+            overflow: hidden;
         }
 
-        .header h1 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,40 100,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            pointer-events: none;
         }
 
-        .header p {
-            font-size: 1.1rem;
+        .back-btn {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
             margin: 0;
+            position: relative;
+            z-index: 1;
         }
 
-        .chat-card {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
         }
 
-        .chat-card .card-header {
-            background-color: #dc3545;
+        .chat-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .sidebar {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            height: 680px;
+            overflow-y: auto;
+        }
+
+        .sidebar h5 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .member-item:hover {
+            background: var(--primary-light);
+            transform: translateX(4px);
+        }
+
+        .member-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            border-radius: 15px 15px 0 0;
-            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .member-item.active:hover {
+            transform: none;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+            transition: border 0.3s ease;
+        }
+
+        .member-item:hover .member-avatar,
+        .member-item.active .member-avatar {
+            border-color: var(--primary);
+        }
+
+        .member-item.active .member-avatar {
+            border-color: white;
+        }
+
+        .member-info {
+            margin-left: 14px;
+            flex: 1;
+        }
+
+        .member-info .username {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .member-info .handle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .member-item.active .handle {
+            opacity: 0.9;
+        }
+
+        .chat-panel {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            height: 680px;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 24px;
             text-align: center;
         }
 
-        .chat-card .chat-area {
-            min-height: 60vh;
-            max-height: 60vh;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #fafafa;
-            border-bottom: 1px solid #ececec;
+        .chat-header h3 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
         }
 
-        .chat-area::-webkit-scrollbar {
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, #ffffff, var(--primary-light));
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
             width: 8px;
         }
 
-        .chat-area::-webkit-scrollbar-thumb {
-            background-color: #dc3545;
-            border-radius: 10px;
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(211, 47, 47, 0.3);
+            border-radius: 4px;
         }
 
-        .message {
-            padding: 10px 15px;
-            border-radius: 15px;
+        .message-wrapper {
+            display: flex;
             max-width: 80%;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease forwards;
         }
 
-        .message-sent {
-            background-color: #dc3545;
-            color: white;
-            margin-left: auto;
-            border-radius: 15px 15px 0 15px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-wrapper.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-bubble {
+            padding: 14px 20px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-sm);
             position: relative;
+            max-width: 100%;
         }
 
-        .message-sent:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -10px;
-            border-top: 15px solid #dc3545;
-            border-left: 15px solid transparent;
-        }
-
-        .message-received {
-            background-color: #f1f1f1;
-            color: #333;
-            border-radius: 15px 15px 15px 0;
-        }
-
-        .member-list {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-        }
-
-        .member-list li {
-            margin-bottom: 1rem;
-        }
-
-        .member-list img {
-            border-radius: 50%;
-            margin-right: 10px;
-            border: 2px solid #dc3545;
-        }
-
-        .member-list a {
-            text-decoration: none;
-            color: #333;
-        }
-
-        .member-list a:hover {
-            text-decoration: underline;
-        }
-
-        .chat-input {
-            background-color: #f8f9fa;
-            border-radius: 30px;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid #ddd;
-        }
-
-        .send-btn {
-            background-color: #dc3545;
+        .message-bubble.sent {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            font-weight: bold;
-            border-radius: 30px;
+            border-bottom-right-radius: 4px;
         }
 
-        .send-btn:hover {
-            background-color: #c82333;
+        .message-bubble.received {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-text {
+            margin-bottom: 6px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            padding: 24px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input-form {
+            display: flex;
+            gap: 16px;
+            align-items: end;
+        }
+
+        .chat-textarea {
+            flex: 1;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            resize: none;
+            font-size: 1rem;
+            max-height: 120px;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .chat-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+            background: white;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                height: auto;
+                max-height: 400px;
+            }
+            .chat-panel {
+                height: auto;
+                margin-top: 30px;
+            }
+            .chat-messages {
+                max-height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 60px 20px 40px;
+            }
+            .back-btn {
+                left: 20px;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .chat-container {
+                padding: 20px 15px;
+            }
+            .message-wrapper {
+                max-width: 90%;
+            }
         }
     </style>
 </head>
-
 <body>
-    <div class="header">
+
+    <header class="page-header">
         {% if user.user_type == 'donor' %}
-            <a href="/donor-dashboard/" class="btn btn-secondary me-2">
-                <i class="fa fa-arrow-left"></i> Donor Dashboard
+            <a href="/donor-dashboard/" class="btn back-btn">
+                <i class="fas fa-arrow-left me-2"></i> Donor Dashboard
             </a>
         {% elif user.user_type == 'recipient' %}
-            <a href="/recip-dashboard/" class="btn btn-secondary me-2">
-                <i class="fa fa-arrow-left"></i> Recipient Dashboard
+            <a href="/recip-dashboard/" class="btn back-btn">
+                <i class="fas fa-arrow-left me-2"></i> Recipient Dashboard
             </a>
         {% endif %}
-        <h1>{{ user.username }}</h1>
-        <p>Connect with Your Colleagues Effortlessly</p>
-    </div>
-    
-    
-    
-    
-    <div class="container my-5">
-        <section>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="member-list p-3">
-                        <h5 class="font-weight-bold text-center mb-3">Members</h5>
-                        <ul class="list-unstyled">
-                            {% for s_user in all_users %}
-                            <li class="d-flex align-items-center mb-2 {% if s_user.username == chat_user.username %}border border-danger border-2 rounded rounded-3 p-2{% endif %}">
-                                <img src="{% if s_user.profile %}/media/{{s_user.profile}}{% else %}https://placehold.co/400x400/png{% endif %}"
-                                    alt="avatar"
-                                    class="rounded-circle"
-                                    width="50">
-                                <div class="ms-3">
-                                    <a href="/chat/{{s_user.username}}">
-                                        <p class="fw-bold mb-0">{{s_user.username}}</p>
-                                        <small class="text-muted">@{{s_user.username}}</small>
-                                    </a>
-                                </div>
-                            </li>
+        <h1>Chat with {{ chat_user.username }}</h1>
+        <p>Secure and private messaging</p>
+    </header>
+
+    <div class="container chat-container">
+        <div class="row g-4">
+            <!-- Members Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5><i class="fas fa-users me-2"></i> Active Members</h5>
+                    <div class="members-list">
+                        {% for s_user in all_users %}
+                        <a href="/chat/{{ s_user.username }}" class="member-item {% if s_user.username == chat_user.username %}active{% endif %}">
+                            <img src="{% if s_user.profile %}/media/{{ s_user.profile }}{% else %}https://placehold.co/400x400/png{% endif %}"
+                                 alt="{{ s_user.username }}" class="member-avatar">
+                            <div class="member-info">
+                                <div class="username">{{ s_user.username }}</div>
+                                <div class="handle">@{{ s_user.username }}</div>
+                            </div>
+                        </a>
                         {% endfor %}
-                        
-                        </ul>
-                    </div>
-                </div>
-    
-                <div class="col-md-8">
-                    <div class="chat-card">
-                        <div class="card-header">
-                            <h3>Chat with {{chat_user.username}}</h3>
-                        </div>
-    
-                        <div class="chat-area">
-                            <ul class="list-unstyled" id="chatMessages">
-                                {% for chat in chats %}
-                                {% if chat.sender == request.user %}
-                                <li class="d-flex justify-content-end mb-4">
-                                    <div class="message message-sent">
-                                        <p class="mb-0">{{ chat.content }}</p>
-                                        <small class="d-block text-end">{{ chat.timestamp }}</small>
-                                    </div>
-                                </li>
-                                {% else %}
-                                <li class="d-flex justify-content-start mb-4">
-                                    <div class="message message-received">
-                                        <p class="mb-0">{{ chat.content }}</p>
-                                        <small class="d-block">{{ chat.timestamp }}</small>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-    
-                        <form id="chatForm" class="p-3 d-flex">
-                            <textarea class="form-control chat-input me-3" name="message" rows="1" placeholder="Type your message..."></textarea>
-                            <button type="submit" class="btn send-btn">Send</button>
-                        </form>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Chat Panel -->
+            <div class="col-lg-8">
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        <h3><i class="fas fa-comment-dots me-2"></i> Chat with {{ chat_user.username }}</h3>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        {% for chat in chats %}
+                            {% if chat.sender == request.user %}
+                            <div class="message-wrapper sent">
+                                <div class="message-bubble sent">
+                                    <div class="message-text">{{ chat.content }}</div>
+                                    <div class="message-time">{{ chat.timestamp|date:"M d, Y g:i a" }}</div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="message-wrapper">
+                                <div class="message-bubble received">
+                                    <div class="message-text">{{ chat.content }}</div>
+                                    <div class="message-time">{{ chat.timestamp|date:"M d, Y g:i a" }}</div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <form id="chatForm" class="chat-input-area">
+                        <div class="chat-input-form">
+                            <textarea class="form-control chat-textarea" name="message" rows="1" placeholder="Type your message..." required></textarea>
+                            <button type="submit" class="send-button" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            const chatArea = document.querySelector('.chat-area');
-    
+            const chatMessages = $('.chat-messages');
+            const chatForm = $('#chatForm');
+            const sendBtn = $('#sendBtn');
+
             function scrollToBottom() {
-                chatArea.scrollTop = chatArea.scrollHeight;
+                chatMessages.scrollTop(chatMessages[0].scrollHeight);
             }
-    
+
             scrollToBottom();
-    
-            // Function to fetch all messages every 8 seconds
+
             function fetchMessages() {
                 $.ajax({
                     type: 'GET',
-                    url: '/fetch_all_messages/{{chat_user.username}}/',
+                    url: '/fetch_all_messages/{{ chat_user.username }}/',
                     success: function (response) {
                         if (response.success) {
                             let messagesHtml = '';
                             response.messages.forEach(function (message) {
-                                let formattedTimestamp = new Date(message.timestamp).toLocaleString('en-US', {
-                                    year: 'numeric',
+                                const time = new Date(message.timestamp).toLocaleString('en-US', {
                                     month: 'short',
                                     day: 'numeric',
+                                    year: 'numeric',
                                     hour: 'numeric',
                                     minute: '2-digit',
                                     hour12: true
-                                }).replace('AM', 'a.m.').replace('PM', 'p.m.');
-    
+                                }).replace(', ', ', ').toLowerCase().replace('am', 'a.m.').replace('pm', 'p.m.');
+
                                 if (message.is_sender) {
                                     messagesHtml += `
-                                        <li class="d-flex justify-content-end mb-4">
-                                            <div class="message message-sent">
-                                                <p class="mb-0">${message.content}</p>
-                                                <small class="d-block text-end">${formattedTimestamp}</small>
+                                        <div class="message-wrapper sent">
+                                            <div class="message-bubble sent">
+                                                <div class="message-text">${message.content}</div>
+                                                <div class="message-time">${time}</div>
                                             </div>
-                                        </li>`;
+                                        </div>`;
                                 } else {
                                     messagesHtml += `
-                                        <li class="d-flex justify-content-start mb-4">
-                                            <div class="message message-received">
-                                                <p class="mb-0">${message.content}</p>
-                                                <small class="d-block">${formattedTimestamp}</small>
+                                        <div class="message-wrapper">
+                                            <div class="message-bubble received">
+                                                <div class="message-text">${message.content}</div>
+                                                <div class="message-time">${time}</div>
                                             </div>
-                                        </li>`;
+                                        </div>`;
                                 }
                             });
                             $('#chatMessages').html(messagesHtml);
                             scrollToBottom();
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching messages:', error);
                     }
                 });
             }
-    
-            // Fetch messages every 8 seconds
+
             setInterval(fetchMessages, 8000);
-    
-            $('#chatForm').submit(function (e) {
+
+            chatForm.submit(function (e) {
                 e.preventDefault();
-    
-                let message = $('textarea[name="message"]').val();
-                let csrfToken = '{{ csrf_token }}';
-    
-                if (message.trim() === "") {
-                    return;  // Prevent sending empty messages
-                }
-    
-                // Append the message immediately to the right side with temporary data
-                let tempMessageId = 'temp-' + Date.now();
-                let tempChatHtml = `
-                    <li class="d-flex justify-content-end mb-4" id="${tempMessageId}">
-                        <div class="message message-sent">
-                            <p class="mb-0">${message}</p>
-                            <small class="d-block text-end">Sending...</small>
+                const message = $('textarea[name="message"]').val().trim();
+                if (!message) return;
+
+                sendBtn.prop('disabled', true);
+
+                // Optimistic UI: append immediately
+                const currentTime = new Date().toLocaleString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric',
+                    hour: 'numeric', minute: '2-digit', hour12: true
+                }).toLowerCase().replace('am', 'a.m.').replace('pm', 'p.m.');
+
+                const tempHtml = `
+                    <div class="message-wrapper sent temp-message">
+                        <div class="message-bubble sent">
+                            <div class="message-text">${message}</div>
+                            <div class="message-time">Sending...</div>
                         </div>
-                    </li>`;
-                $('#chatMessages').append(tempChatHtml);
+                    </div>`;
+                chatMessages.append(tempHtml);
                 scrollToBottom();
-    
-                // Send the message to the server using AJAX
+                $('textarea[name="message"]').val('');
+
                 $.ajax({
                     type: 'POST',
-                    url: '/save_message/{{chat_user.username}}',
+                    url: '/save_message/{{ chat_user.username }}',
                     data: {
                         'message': message,
-                        'csrfmiddlewaretoken': csrfToken
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     success: function () {
-                        // Update the temporary message with the current timestamp
-                        let currentTimestamp = new Date().toLocaleString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true
-                        }).replace('AM', 'a.m.').replace('PM', 'p.m.');
-                        let updatedHtml = `
-                            <div class="message message-sent">
-                                <p class="mb-0">${message}</p>
-                                <small class="d-block text-end">${currentTimestamp}</small>
-                            </div>`;
-                        $(`#${tempMessageId}`).html(updatedHtml);
-                        $('textarea[name="message"]').val("");
-                        scrollToBottom();
+                        $('.temp-message .message-time').text(currentTime);
+                        $('.temp-message').removeClass('temp-message');
                     },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                        // Show an error message if the request fails
-                        $(`#${tempMessageId}`).find('small').text('Failed to send. Please try again.');
+                    error: function () {
+                        $('.temp-message .message-time').text('Failed to send');
+                        $('.temp-message').addClass('text-danger');
+                    },
+                    complete: function () {
+                        sendBtn.prop('disabled', false);
                     }
                 });
+            });
+
+            // Auto-resize textarea
+            $('textarea').on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
             });
         });
     </script>
 </body>
-
 </html>

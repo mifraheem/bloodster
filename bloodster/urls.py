@@ -4,6 +4,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from website.controllers import basic_controller, user_controller, dashboards, bloodRequest, chat_controller
+from website.views import *
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
@@ -56,6 +57,8 @@ urlpatterns = [
          chat_controller.save_message, name='save_message'),
     path('fetch_all_messages/<str:chat_user>/',
          chat_controller.fetch_all_messages, name='fetch_all_messages'),
+path("donor-assistant/", donor_chatbot_page, name="donor-chatbot-page"),
+    path("api/donor-chatbot/", donor_chatbot, name="donor_chatbot"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

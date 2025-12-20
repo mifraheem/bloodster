@@ -108,3 +108,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'imsadaqatali414@gmail.com'
 EMAIL_HOST_PASSWORD = 'pyfp ctvm qnav uiva'
+
+
+OPENROUTER_API_KEY = "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"

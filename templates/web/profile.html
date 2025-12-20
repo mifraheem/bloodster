@@ -1,74 +1,283 @@
 {% extends "base.html" %}
+{% load static %}
+{% block css %}
+<style>
+    :root {
+        --primary: #d32f2f;
+        --primary-dark: #b71c1c;
+        --primary-light: #ffebee;
+        --accent: #ffc107;
+        --text-dark: #212121;
+        --text-medium: #555555;
+        --text-light: #777777;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --border: #e0e0e0;
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+        --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+        --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 70px 20px 50px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,40 100,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
+        pointer-events: none;
+    }
+
+    .profile-header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .profile-header p {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        margin-top: 12px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .update-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 50px 20px;
+    }
+
+    .update-card {
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .update-card:hover {
+        box-shadow: var(--shadow-lg);
+    }
+
+    .card-body {
+        padding: 50px;
+    }
+
+    .profile-picture-section {
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 6px solid var(--primary-light);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .upload-btn {
+        margin-top: 24px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+    }
+
+    .form-section h3 {
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 30px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--primary-light);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-medium);
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.15);
+        background: white;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 16px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        border: none;
+        width: 100%;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(211, 47, 47, 0.3);
+    }
+
+    @media (max-width: 992px) {
+        .card-body {
+            padding: 40px;
+        }
+        .profile-avatar {
+            width: 180px;
+            height: 180px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .profile-header h1 {
+            font-size: 2.3rem;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .profile-picture-section {
+            margin-bottom: 40px;
+        }
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+        }
+    }
+</style>
+{% endblock css %}
 
 {% block content %}
-<div class="container">
-    <h2 class="text-center">Update Profile</h2>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Profile Picture</h4>
-            <!-- Image preview -->
-            <img id="profileImagePreview" src="/media/{{ user.profile }}" alt="Profile Image" class="img-thumbnail" width="200">
-            <br><br>
-            <label for="id_profile_image" class="btn btn-primary">
-                Change Profile Picture
-            </label>
-        </div>
-        
-        <div class="col-md-8">
-            <form action="" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" id="id_profile_image" name="profile" style="display:none;" onchange="previewImage(event)">
-                <div class="form-group">
-                    <label for="id_username">Username</label>
-                    <input type="text" class="form-control" id="id_username" name="username" value="{{ user.username }}" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="id_email">Email</label>
-                    <input type="email" class="form-control" id="id_email" name="email" value="{{ user.email }}" required>
+{% comment %} <header class="profile-header">
+    <h1>Update Profile</h1>
+    <p>Keep your information current to help save more lives</p>
+</header> {% endcomment %}
+
+<div class="container update-container">
+    <div class="card update-card">
+        <div class="card-body">
+            <div class="row align-items-start">
+                <!-- Profile Picture Section -->
+                <div class="col-lg-4 profile-picture-section">
+                    <h4 class="mb-4"><i class="fas fa-user-circle me-2"></i> Profile Picture</h4>
+                    <img id="profileImagePreview" 
+                         src="{% if user.profile %}/media/{{ user.profile }}{% else %}https://via.placeholder.com/300{% endif %}" 
+                         alt="Profile Image" 
+                         class="profile-avatar img-fluid">
+                    <br><br>
+                    <label for="id_profile_image" class="upload-btn">
+                        <i class="fas fa-camera me-2"></i> Change Profile Picture
+                    </label>
                 </div>
 
-                <div class="form-group">
-                    <label for="id_phone_number">Phone Number</label>
-                    <input type="text" class="form-control" id="id_phone_number" name="phone_number" value="{{ user.phone_number }}">
-                </div>
+                <!-- Form Section -->
+                <div class="col-lg-8 form-section">
+                    <h3><i class="fas fa-edit me-2"></i> Personal Information</h3>
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" id="id_profile_image" name="profile" style="display:none;" onchange="previewImage(event)">
 
-                <div class="form-group">
-                    <label for="id_blood_group">Blood Group</label>
-                    <select class="form-control" id="id_blood_group" name="blood_group">
-                        <option value="">Select your blood group</option>
-                        <option value="A+" {% if user.blood_group == "A+" %}selected{% endif %}>A+</option>
-                        <option value="A-" {% if user.blood_group == "A-" %}selected{% endif %}>A-</option>
-                        <option value="B+" {% if user.blood_group == "B+" %}selected{% endif %}>B+</option>
-                        <option value="B-" {% if user.blood_group == "B-" %}selected{% endif %}>B-</option>
-                        <option value="AB+" {% if user.blood_group == "AB+" %}selected{% endif %}>AB+</option>
-                        <option value="AB-" {% if user.blood_group == "AB-" %}selected{% endif %}>AB-</option>
-                        <option value="O+" {% if user.blood_group == "O+" %}selected{% endif %}>O+</option>
-                        <option value="O-" {% if user.blood_group == "O-" %}selected{% endif %}>O-</option>
-                    </select>
-                </div>
-                
+                        <div class="form-group">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="id_username" name="username" value="{{ user.username }}" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="id_location">Location</label>
-                    <input type="text" class="form-control" id="id_location" name="location" value="{{ user.location }}">
-                </div>
+                        <div class="form-group">
+                            <label for="id_email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="id_email" name="email" value="{{ user.email }}" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="id_user_type">User Type</label>
-                    <select class="form-control" id="id_user_type" name="user_type" disabled>
-                        <option value="donor" {% if user.user_type == 'donor' %}selected{% endif %}>Donor</option>
-                        <option value="recipient" {% if user.user_type == 'recipient' %}selected{% endif %}>Recipient</option>
-                    </select>
-                </div>
+                        <div class="form-group">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="id_phone_number" name="phone_number" value="{{ user.phone_number }}">
+                        </div>
 
-                <button type="submit" class="btn btn-success w-100">Update Profile</button>
-            </form>
+                        <div class="form-group">
+                            <label for="id_blood_group" class="form-label">Blood Group</label>
+                            <select class="form-select" id="id_blood_group" name="blood_group" required>
+                                <option value="">-- Select your blood group --</option>
+                                <option value="A+" {% if user.blood_group == "A+" %}selected{% endif %}>A+</option>
+                                <option value="A-" {% if user.blood_group == "A-" %}selected{% endif %}>A-</option>
+                                <option value="B+" {% if user.blood_group == "B+" %}selected{% endif %}>B+</option>
+                                <option value="B-" {% if user.blood_group == "B-" %}selected{% endif %}>B-</option>
+                                <option value="AB+" {% if user.blood_group == "AB+" %}selected{% endif %}>AB+</option>
+                                <option value="AB-" {% if user.blood_group == "AB-" %}selected{% endif %}>AB-</option>
+                                <option value="O+" {% if user.blood_group == "O+" %}selected{% endif %}>O+</option>
+                                <option value="O-" {% if user.blood_group == "O-" %}selected{% endif %}>O-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="id_location" name="location" value="{{ user.location }}" placeholder="e.g., City, State">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_user_type" class="form-label">Account Type</label>
+                            <select class="form-select" id="id_user_type" name="user_type" disabled>
+                                <option value="donor" {% if user.user_type == 'donor' %}selected{% endif %}>Donor</option>
+                                <option value="recipient" {% if user.user_type == 'recipient' %}selected{% endif %}>Recipient</option>
+                            </select>
+                            <small class="text-muted">Account type cannot be changed.</small>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-save me-2"></i> Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Script to preview image -->
 <script>
     function previewImage(event) {
         const reader = new FileReader();
@@ -78,5 +287,15 @@
         };
         reader.readAsDataURL(event.target.files[0]);
     }
+
+    // Optional: Add subtle animation when image is changed
+    document.getElementById('id_profile_image').addEventListener('change', function() {
+        const preview = document.getElementById('profileImagePreview');
+        preview.style.transition = 'transform 0.3s ease';
+        preview.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+            preview.style.transform = 'scale(1)';
+        }, 300);
+    });
 </script>
-{% endblock %}
+{% endblock content %}

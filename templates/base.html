@@ -1,65 +1,225 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="en"> <!--<![endif]-->
-
+<html lang="en">
+  {% load static %}
 <head>
-
     <meta charset="utf-8">
     <title>{{title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Reddrop Buddies - Blood Donation Campaign & Multi-Concept Activism Template">
     <meta name="author" content="xenioushk">
-    <link rel="shortcut icon" href="static/images/favicon.png" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
 
-    {% load static %}
+  
 
     <!-- The styles -->
-    <link rel="stylesheet" href="{% static  'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/venobox.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
-    <link href="{% static  'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static  'css/animate.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static  'css/owl.carousel.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static  'css/venobox.css' %}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static  'css/styles.css' %}" />
+    <!-- Updated Font Awesome & Additional Animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-dark: #b71c1c;
+            --primary-light: #ffebee;
+            --accent: #ffc107;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            animation: fadeInDown 0.9s ease forwards;
+        }
+
+        .top-bar p {
+            animation: fadeIn 1.4s ease forwards;
+        }
+
+        .top-bar i {
+            animation: pulse 2.5s infinite;
+        }
+
+        /* Navbar Section */
+        .header-wrapper {
+            background: white;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s ease;
+            animation: fadeInDown 1.1s ease forwards;
+        }
+
+        .main-header[data-sticky_header="true"] .header-wrapper.sticky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            animation: slideDown 0.5s ease;
+        }
+
+        .logo img {
+            transition: transform 0.4s ease;
+        }
+
+        .logo img:hover {
+            transform: rotate(12deg) scale(1.12);
+        }
+
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            padding: 12px 20px !important;
+            border-radius: 50px;
+        }
+
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .navbar-nav .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+            background: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(211,47,47,0.3);
+        }
+
+        /* Alerts */
+        .alert-container {
+            max-width: 700px;
+            margin: 30px auto;
+        }
+
+        .alert {
+            border-radius: 14px;
+            box-shadow: var(--shadow-sm);
+            animation: slideInRight 0.7s ease forwards;
+        }
+
+        /* Back to Top */
+        #backTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+
+        #backTop.visible {
+            opacity: 1;
+            visibility: visible;
+            animation: bounceIn 0.8s ease;
+        }
+
+        #backTop:hover {
+            transform: translateY(-10px) scale(1.1);
+            background: var(--primary-dark);
+            box-shadow: 0 12px 25px rgba(211,47,47,0.4);
+        }
+
+        /* Keyframes */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideDown {
+            from { top: -100px; }
+            to { top: 0; }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar p {
+                text-align: center;
+                font-size: 0.9rem;
+            }
+            .navbar-nav .nav-link {
+                text-align: center;
+                margin: 5px 0;
+            }
+        }
+    </style>
+
     {% block css %}{% endblock css %}
+</head>
 
 <body>
 
-    <!--  HEADER -->
-
+    <!-- HEADER -->
     <header class="main-header clearfix" data-sticky_header="true">
 
         <div class="top-bar clearfix">
-
             <div class="container">
-
                 <div class="row">
-
                     <div class="col-md-8 col-sm-12">
-
                         <p>
                             <span><i class="fa fa-building-o"></i> <strong>Contact: </strong> L.L.F Kotli Azad kashmir</span>
                             <span>&nbsp;<i class="fa fa-phone"></i> <strong>Call Us:</strong> +123-456-789</span>
                         </p>
-
                     </div>
-
-
                 </div>
-
-            </div> <!--  end .container -->
-
-        </div> <!--  end .top-bar  -->
+            </div>
+        </div>
 
         <section class="header-wrapper navgiation-wrapper">
-
             <div class="navbar navbar-default">
                 <div class="container">
-
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target=".navbar-collapse">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -69,47 +229,34 @@
 
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav navbar-right">
-
-                            <li>
-                                <a href="/">Home</a>
-                            </li>
-
-
+                            <li><a href="/">Home</a></li>
                             <li><a href="/#about" title="About Us">About Us</a></li>
-                            <li>
-                                <a class="nav-link" href="/#gallery">Gallery</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="/#gallery">Process</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="/#campaigns">Campaigns</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="/#contact">Contact</a>
-                            </li>
+                            <li><a class="nav-link" href="/#gallery">Gallery</a></li>
+                            <li><a class="nav-link" href="/#gallery">Process</a></li>
+                            <li><a class="nav-link" href="/#campaigns">Campaigns</a></li>
+                            <li><a class="nav-link" href="/#contact">Contact</a></li>
 
                             {% if user.is_authenticated %}
-                            {% if user.user_type == 'recipient' %}
-                            <li><a  href="{% url 'recipient-dashboard' %}">Dashboard</a></li>
-                            {% endif %}
-                            {% if user.user_type == 'donor' %}
-                            <li><a  href="{% url 'donor-dashboard' %}">Dashboard</a></li>
-                            {% endif %}
-                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                                {% if user.user_type == 'recipient' %}
+                                    <li><a href="{% url 'recipient-dashboard' %}">Dashboard</a></li>
+                                {% endif %}
+                                {% if user.user_type == 'donor' %}
+                                    <li><a href="{% url 'donor-dashboard' %}">Dashboard</a></li>
+                                    <li><a href="{% url 'donor-chatbot-page' %}">chatbot</a></li>
+                                {% endif %}
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
                             {% else %}
-                            <li><a href="{% url 'register' %}">Register</a></li>
+                                <li><a href="{% url 'register' %}">Register</a></li>
                             {% endif %}
                         </ul>
                     </div>
                 </div>
             </div>
-
         </section>
 
-    </header> <!-- end main-header  -->
+    </header>
+
     {% if messages %}
-    
     <div class="alert-container">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade in">
@@ -119,24 +266,50 @@
         {% endfor %}
     </div>
     {% endif %}
+
     {% block content %}{% endblock content %}
 
+    <!-- Back To Top Button -->
+    <a id="backTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 
-    <!-- Back To Top Button  -->
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/jquery.backTop.min.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/waypoints-sticky.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/venobox.min.js' %}"></script>
+    <script src="{% static 'js/custom-scripts.js' %}"></script>
 
-    <a id="backTop">Back To Top</a>
+    <!-- Enhanced Sticky Header & Back to Top -->
+    <script>
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('.header-wrapper').addClass('sticky');
+                $('#backTop').addClass('visible');
+            } else {
+                $('.header-wrapper').removeClass('sticky');
+                $('#backTop').removeClass('visible');
+            }
+        });
 
-    <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-    <script src="static/js/wow.min.js"></script>
-    <script src="static/js/jquery.backTop.min.js "></script>
-    <script src="static/js/waypoints.min.js"></script>
-    <script src="static/js/waypoints-sticky.min.js"></script>
-    <script src="static/js/owl.carousel.min.js"></script>
-    <script src="static/js/jquery.stellar.min.js"></script>
-    <script src="static/js/jquery.counterup.min.js"></script>
-    <script src="static/js/venobox.min.js"></script>
-    <script src="static/js/custom-scripts.js"></script>
+        $('#backTop').click(function(e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, 900);
+            return false;
+        });
+
+        // WOW.js init for page content animations
+        new WOW({
+            mobile: false
+        }).init();
+    </script>
 </body>
 
 </html>
