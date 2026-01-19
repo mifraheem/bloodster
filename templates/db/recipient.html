@@ -1,574 +1,829 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipient Dashboard - Bloodster</title>
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary: #198754;
-            --primary-dark: #157347;
-            --primary-light: #d1e7dd;
-            --accent: #ffc107;
-            --text-dark: #212121;
-            --text-medium: #555555;
-            --text-light: #777777;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --border: #e0e0e0;
-            --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
-            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
-        }
+      :root {
+        --primary: #198754;
+        --primary-dark: #157347;
+        --primary-light: #d1e7dd;
+        --accent: #ffc107;
+        --text-dark: #212121;
+        --text-medium: #555555;
+        --text-light: #777777;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --border: #e0e0e0;
+        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
 
-        body {
-            background: linear-gradient(to bottom, var(--primary-light), var(--bg-light));
-            font-family: 'Segoe UI', Arial, sans-serif;
-            min-height: 100vh;
-        }
+      body {
+        background: linear-gradient(
+          to bottom,
+          var(--primary-light),
+          var(--bg-light)
+        );
+        font-family: "Segoe UI", Arial, sans-serif;
+        min-height: 100vh;
+      }
 
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 0;
-        }
+      .navbar {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        ) !important;
+        box-shadow: var(--shadow-sm);
+        padding: 1rem 0;
+      }
 
-        .navbar-brand {
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+      .navbar-brand {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
 
-        .nav-link {
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+      .nav-link {
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
 
-        .nav-link:hover {
-            color: var(--accent) !important;
-        }
+      .nav-link:hover {
+        color: var(--accent) !important;
+      }
 
-        .dashboard-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 70px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+      .dashboard-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        padding: 70px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
 
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,40 100,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: cover;
-            pointer-events: none;
-        }
+      .dashboard-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,40 100,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
+        pointer-events: none;
+      }
 
+      .dashboard-header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInDown 1s ease;
+      }
+
+      .dashboard-header p {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1s ease 0.5s forwards;
+        opacity: 0;
+      }
+
+      .card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        font-weight: 600;
+        font-size: 1.25rem;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .card-body {
+        padding: 30px;
+      }
+
+      .profile-summary p {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeInLeft 1s ease;
+      }
+
+      .profile-summary i {
+        color: var(--primary);
+        width: 20px;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: var(--text-medium);
+      }
+
+      .form-control,
+      .form-select {
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        transition: all 0.3s ease;
+        background: #fafafa;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15);
+        background: white;
+      }
+
+      .btn-custom {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .btn-custom:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(25, 135, 84, 0.4);
+      }
+
+      .list-group-item {
+        border: none;
+        border-bottom: 1px solid var(--border);
+        border-radius: 0 !important;
+        padding: 20px;
+        transition: background 0.3s ease;
+      }
+
+      .list-group-item:hover {
+        background: var(--primary-light);
+      }
+
+      .list-group-item h5 {
+        color: var(--text-dark);
+        margin-bottom: 8px;
+      }
+
+      .list-group-item p {
+        margin-bottom: 4px;
+        color: var(--text-medium);
+      }
+
+      .btn-primary,
+      .btn-success {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover,
+      .btn-success:hover {
+        transform: translateY(-3px);
+      }
+
+      .table thead th {
+        background: var(--primary-light);
+        border: none;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .badge {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+        border-radius: 50px;
+      }
+
+      .health-resources ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .health-resources li {
+        padding: 12px 0;
+        border-bottom: 1px dashed var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.05rem;
+        animation: fadeInUp 1s ease;
+      }
+
+      .health-resources li:last-child {
+        border-bottom: none;
+      }
+
+      .health-resources i {
+        color: var(--primary);
+        font-size: 1.2rem;
+      }
+
+      /* Animations */
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 992px) {
         .dashboard-header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInDown 1s ease;
+          font-size: 2.4rem;
         }
+      }
 
-        .dashboard-header p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 1s ease 0.5s forwards;
-            opacity: 0;
+      @media (max-width: 768px) {
+        .dashboard-header {
+          padding: 60px 20px;
         }
-
-        .card {
-            border: none;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            font-weight: 600;
-            font-size: 1.25rem;
-            padding: 20px;
-            text-align: center;
-        }
-
         .card-body {
-            padding: 30px;
+          padding: 20px;
         }
-
-        .profile-summary p {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: fadeInLeft 1s ease;
-        }
-
-        .profile-summary i {
-            color: var(--primary);
-            width: 20px;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: var(--text-medium);
-        }
-
-        .form-control, .form-select {
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(25,135,84,0.15);
-            background: white;
-        }
-
-        .btn-custom {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-custom:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(25,135,84,0.4);
-        }
-
-        .list-group-item {
-            border: none;
-            border-bottom: 1px solid var(--border);
-            border-radius: 0 !important;
-            padding: 20px;
-            transition: background 0.3s ease;
-        }
-
-        .list-group-item:hover {
-            background: var(--primary-light);
-        }
-
-        .list-group-item h5 {
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .list-group-item p {
-            margin-bottom: 4px;
-            color: var(--text-medium);
-        }
-
-        .btn-primary, .btn-success {
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover, .btn-success:hover {
-            transform: translateY(-3px);
-        }
-
-        .table thead th {
-            background: var(--primary-light);
-            border: none;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .badge {
-            font-size: 0.9rem;
-            padding: 8px 14px;
-            border-radius: 50px;
-        }
-
-        .health-resources ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .health-resources li {
-            padding: 12px 0;
-            border-bottom: 1px dashed var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.05rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        .health-resources li:last-child {
-            border-bottom: none;
-        }
-
-        .health-resources i {
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @media (max-width: 992px) {
-            .dashboard-header h1 {
-                font-size: 2.4rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-header {
-                padding: 60px 20px;
-            }
-            .card-body {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">Bloodster</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#recipientNavbar"
-                aria-controls="recipientNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="recipientNavbar">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-2"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'chat' %}"><i class="fas fa-comments me-2"></i> Messages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'update_profile' %}"><i class="fas fa-user-cog me-2"></i> Profile Settings</a>
-                    </li>
-                </ul>
-            </div>
+      <div class="container">
+        <a class="navbar-brand" href="/">Bloodster</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#recipientNavbar"
+          aria-controls="recipientNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="recipientNavbar">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}"
+                ><i class="fas fa-home me-2"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'chat' %}"
+                ><i class="fas fa-comments me-2"></i> Messages</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'update_profile' %}"
+                ><i class="fas fa-user-cog me-2"></i> Profile Settings</a
+              >
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
     <!-- Header -->
     <header class="dashboard-header">
-        <h1>Welcome back, {{ user.username }}!</h1>
-        <p>We're here to help you find the blood you need quickly and safely.</p>
+      <h1>Welcome back, {{ user.username }}!</h1>
+      <p>We're here to help you find the blood you need quickly and safely.</p>
     </header>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <h5>Total Requests</h5>
+            <h2>{{ total_requests }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <h5>Active Requests</h5>
+            <h2>{{ active_requests_count }}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <h5>Completed</h5>
+            <h2>{{ completed_requests }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Alert Messages -->
     {% if messages %}
     <div class="container mt-4">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
     </div>
     {% endif %}
 
     <!-- Main Content -->
     <div class="container my-5">
-        <div class="row g-4">
-            <!-- Profile Summary -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card profile-summary">
-                    <div class="card-header">
-                        <i class="fas fa-user-circle me-2"></i> Profile Summary
-                    </div>
-                    <div class="card-body">
-                        <p><i class="fas fa-tint"></i> <strong>Blood Type:</strong> {{ request.user.blood_group }}</p>
-                        <p><i class="fas fa-map-marker-alt"></i> <strong>Location:</strong> {{ request.user.location }}</p>
-                        <p><i class="fas fa-envelope"></i> <strong>Requests Made:</strong> {{ requests_made_count }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Request Blood -->
-            <div class="col-lg-8 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-plus-circle me-2"></i> Request Blood
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="{% url 'blood-request' %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="bloodGroup" class="form-label">Required Blood Group</label>
-                                <select class="form-select" id="bloodGroup" name="requested_blood_group" required>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="urgency" class="form-label">Urgency Level</label>
-                                <select class="form-select" id="urgency" name="urgency" required>
-                                    <option value="Immediate">Immediate</option>
-                                    <option value="24 hours" selected>Within 24 hours</option>
-                                    <option value="3 days">Within 3 days</option>
-                                    <option value="7 days">Within 7 days</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="location" class="form-label">Hospital/Location</label>
-                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter hospital or location" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="additionalInfo" class="form-label">Additional Information</label>
-                                <textarea class="form-control" id="additionalInfo" name="additional_info" rows="3" placeholder="Provide any additional details"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-custom w-100">
-                                <i class="fas fa-paper-plane me-2"></i> Submit Blood Request
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Available Donors -->
-        <div class="card">
+      <div class="row g-4">
+        <!-- Profile Summary -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card profile-summary">
             <div class="card-header">
-                <i class="fas fa-users me-2"></i> Available Donors Matching Your Request
+              <i class="fas fa-user-circle me-2"></i> Profile Summary
             </div>
             <div class="card-body">
-                <div class="list-group">
-                    {% if matching_donors %}
-                        {% for donor in matching_donors %}
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div>
-                                <h5>{{ donor.username }}</h5>
-                                <p><strong>Blood Type:</strong> {{ donor.blood_group }}</p>
-                                <p><strong>Location:</strong> {{ donor.location }}</p>
-                            </div>
-                            <div class="d-flex flex-column gap-2">
-                                <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">
-                                    <i class="fas fa-eye me-1"></i> View Profile
-                                </a>
-                                <a href="{% url 'chat_user' donor.username %}" class="btn btn-success">
-                                    <i class="fas fa-comment me-1"></i> Send Message
-                                </a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                    <p class="text-center text-muted my-4">No matching donors found at the moment.</p>
-                    {% endif %}
-                </div>
+              <p>
+                <i class="fas fa-tint"></i> <strong>Blood Type:</strong> {{ request.user.blood_group }}
+              </p>
+              <p>
+                <i class="fas fa-map-marker-alt"></i>
+                <strong>Location:</strong> {{ request.user.location }}
+              </p>
+              <p>
+                <i class="fas fa-envelope"></i>
+                <strong>Requests Made:</strong> {{ requests_made_count }}
+              </p>
             </div>
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#allDonorsModal">
-                    <i class="fas fa-list me-2"></i> View All Available Donors
+          </div>
+        </div>
+
+        {% if has_active_request %}
+        <div class="alert alert-warning">
+          <strong>Warning:</strong> You already have an active blood request.
+          You cannot create another until it is completed or cancelled.
+        </div>
+        {% endif %}
+
+        <!-- Request Blood -->
+        <div class="col-lg-8 col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <i class="fas fa-plus-circle me-2"></i> Request Blood
+            </div>
+            <div class="card-body">
+              {% if not has_active_request %}
+              <form method="POST" action="{% url 'blood-request' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="bloodGroup" class="form-label"
+                    >Required Blood Group</label
+                  >
+                  <select
+                    class="form-select"
+                    id="bloodGroup"
+                    name="requested_blood_group"
+                    required
+                  >
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="urgency" class="form-label">Urgency Level</label>
+                  <select
+                    class="form-select"
+                    id="urgency"
+                    name="urgency"
+                    required
+                  >
+                    <option value="Immediate">Immediate</option>
+                    <option value="24 hours" selected>Within 24 hours</option>
+                    <option value="3 days">Within 3 days</option>
+                    <option value="7 days">Within 7 days</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="location" class="form-label"
+                    >Hospital/Location</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="location"
+                    name="location"
+                    placeholder="Enter hospital or location"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="additionalInfo" class="form-label"
+                    >Additional Information</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="additionalInfo"
+                    name="additional_info"
+                    rows="3"
+                    placeholder="Provide any additional details"
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">
+                  <i class="fas fa-paper-plane me-2"></i> Submit Blood Request
                 </button>
+              </form>
+              {% else %}
+              <button class="btn btn-secondary w-100" disabled>
+                You already have an active request
+              </button>
+              {% endif %}
             </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Modal for All Donors -->
-        <div class="modal fade" id="allDonorsModal" tabindex="-1" aria-labelledby="allDonorsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="allDonorsModalLabel"><i class="fas fa-users me-2"></i> All Available Donors</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="list-group">
-                            {% if all_donors %}
-                                {% for donor in all_donors %}
-                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <h5>{{ donor.username }}</h5>
-                                        <p><strong>Blood Type:</strong> {{ donor.blood_group }}</p>
-                                        <p><strong>Location:</strong> {{ donor.location }}</p>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{% url 'donor-profile' donor.id %}" class="btn btn-primary">
-                                            <i class="fas fa-eye me-1"></i> View Profile
-                                        </a>
-                                        <a href="{% url 'chat_user' donor.username %}" class="btn btn-success">
-                                            <i class="fas fa-comment me-1"></i> Send Message
-                                        </a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                            <p class="text-center text-muted my-4">No available donors found.</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
+      <!-- Available Donors -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-users me-2"></i> Available Donors Matching Your
+          Request
         </div>
-
-        <!-- My Requests -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-list-alt me-2"></i> My Blood Requests
+        <div class="card-body">
+          <div class="list-group">
+            {% if matching_donors %} 
+            {% for donor in matching_donors %}
+            <div
+              class="list-group-item d-flex justify-content-between align-items-start"
+            >
+              <div>
+                <h5>{{ donor.username }}</h5>
+                <p><strong>Blood Type:</strong> {{ donor.blood_group }}</p>
+                <p><strong>Location:</strong> {{ donor.location }}</p>
+              </div>
+              <div class="d-flex flex-column gap-2">
+                <a
+                  href="{% url 'donor-profile' donor.id %}"
+                  class="btn btn-primary"
+                >
+                  <i class="fas fa-eye me-1"></i> View Profile
+                </a>
+                <a
+                  href="{% url 'chat_user' donor.username %}"
+                  class="btn btn-success"
+                >
+                  <i class="fas fa-comment me-1"></i> Send Message
+                </a>
+              </div>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Request Date</th>
-                                <th>Blood Group</th>
-                                <th>Urgency</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for request in requests %}
-                            <tr>
-                                <td>{{ request.request_date|date:"d M Y" }}</td>
-                                <td>{{ request.requested_blood_group }}</td>
-                                <td>{{ request.urgency }}</td>
-                                {% if request.status == 'fulfilled' %}
-                                <td><span class="badge bg-success text-uppercase">{{ request.status }}</span></td>
-                                {% elif request.status == 'in_progress' %}
-                                <td><span class="badge bg-info text-uppercase">{{ request.status }}</span></td>
-                                {% elif request.status == 'cancelled' %}
-                                <td><span class="badge bg-danger text-uppercase">{{ request.status }}</span></td>
-                                {% else %}
-                                <td><span class="badge bg-warning text-dark text-uppercase">{{ request.status }}</span></td>
-                                {% endif %}
-                                <td>
-                                    <a href="{% url 'view-request' request.id %}" class="btn btn-sm btn-secondary">View</a>
-                                    <a href="{% url 'cancel-request' request.id %}" class="btn btn-sm btn-danger">Cancel</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted py-4">No requests made yet.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            {% endfor %} {% else %}
+            <p class="text-center text-muted my-4">
+              No matching donors found at the moment.
+            </p>
+            {% endif %}
+          </div>
         </div>
+        <div class="card-footer text-center">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-toggle="modal"
+            data-bs-target="#allDonorsModal"
+          >
+            <i class="fas fa-list me-2"></i> View All Available Donors
+          </button>
+        </div>
+      </div>
 
-        <!-- Donation Confirmation -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-check-circle me-2"></i> Confirm Donations
+      <!-- Modal for All Donors -->
+      <div
+        class="modal fade"
+        id="allDonorsModal"
+        tabindex="-1"
+        aria-labelledby="allDonorsModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="allDonorsModalLabel">
+                <i class="fas fa-users me-2"></i> All Available Donors
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-            <div class="card-body">
-                {% if donations_confirmation %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Donation Date</th>
-                                <th>Donor</th>
-                                <th>Location</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for donation in donations_confirmation %}
-                            <tr>
-                                <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
-                                <td>{{ donation.donor.username }}</td>
-                                <td>{{ donation.location }}</td>
-                                {% if donation.is_verified %}
-                                <td><span class="badge bg-success text-uppercase">Verified</span></td>
-                                {% else %}
-                                <td><span class="badge bg-warning text-dark text-uppercase">Pending Verification</span></td>
-                                {% endif %}
-                                <td>
-                                    {% if not donation.is_verified %}
-                                    <a href="{% url 'reject-donation' donation.id %}" class="btn btn-sm btn-danger">Reject</a>
-                                    <a href="{% url 'verify-donation' donation.id %}" class="btn btn-sm btn-success">Verify</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="modal-body">
+              <div class="list-group">
+                {% if all_donors %} {% for donor in all_donors %}
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-start"
+                >
+                  <div>
+                    <h5>{{ donor.username }}</h5>
+                    <p><strong>Blood Type:</strong> {{ donor.blood_group }}</p>
+                    <p><strong>Location:</strong> {{ donor.location }}</p>
+                  </div>
+                  <div class="d-flex flex-column gap-2">
+                    <a
+                      href="{% url 'donor-profile' donor.id %}"
+                      class="btn btn-primary"
+                    >
+                      <i class="fas fa-eye me-1"></i> View Profile
+                    </a>
+                    <a
+                      href="{% url 'chat_user' donor.username %}"
+                      class="btn btn-success"
+                    >
+                      <i class="fas fa-comment me-1"></i> Send Message
+                    </a>
+                  </div>
                 </div>
-                {% else %}
-                <p class="text-center text-muted my-4">No confirmation requests pending.</p>
+                {% endfor %} {% else %}
+                <p class="text-center text-muted my-4">
+                  No available donors found.
+                </p>
                 {% endif %}
+              </div>
             </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Health Resources -->
-        <div class="card health-resources">
-            <div class="card-header">
-                <i class="fas fa-heartbeat me-2"></i> Health Resources & Tips
-            </div>
-            <div class="card-body">
-                <h5 class="mb-4">Important Information About Blood Transfusions</h5>
-                <ul>
-                    <li><i class="fas fa-info-circle"></i> Understanding blood types and compatibility.</li>
-                    <li><i class="fas fa-calendar-check"></i> Preparing for a blood transfusion.</li>
-                    <li><i class="fas fa-stethoscope"></i> Post-transfusion care and monitoring.</li>
-                    <li><i class="fas fa-shield-alt"></i> Safety measures and screening processes.</li>
-                    <li><i class="fas fa-question-circle"></i> Common myths and facts about receiving blood.</li>
-                </ul>
-            </div>
+      <!-- My Requests -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-list-alt me-2"></i> My Blood Requests
         </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Request Date</th>
+                  <th>Blood Group</th>
+                  <th>Urgency</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for request in requests %}
+                <tr>
+                  <td>{{ request.request_date|date:"d M Y" }}</td>
+                  <td>{{ request.requested_blood_group }}</td>
+                  <td>{{ request.urgency }}</td>
+                  {% if request.status == 'fulfilled' %}
+                  <td>
+                    <span class="badge bg-success text-uppercase"
+                      >{{ request.status }}</span
+                    >
+                  </td>
+                  {% elif request.status == 'in_progress' %}
+                  <td>
+                    <span class="badge bg-info text-uppercase"
+                      >{{ request.status }}</span
+                    >
+                  </td>
+                  {% elif request.status == 'cancelled' %}
+                  <td>
+                    <span class="badge bg-danger text-uppercase"
+                      >{{ request.status }}</span
+                    >
+                  </td>
+                  {% else %}
+                  <td>
+                    <span class="badge bg-warning text-dark text-uppercase"
+                      >{{ request.status }}</span
+                    >
+                  </td>
+                  {% endif %}
+                  <td>
+                    <a
+                      href="{% url 'view-request' request.id %}"
+                      class="btn btn-sm btn-secondary"
+                      >View</a
+                    >
+                    <a
+                      href="{% url 'cancel-request' request.id %}"
+                      class="btn btn-sm btn-danger"
+                      >Cancel</a
+                    >
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">
+                    No requests made yet.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donation Confirmation -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-check-circle me-2"></i> Confirm Donations
+        </div>
+        <div class="card-body">
+          {% if donations_confirmation %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Donation Date</th>
+                  <th>Donor</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for donation in donations_confirmation %}
+                <tr>
+                  <td>{{ donation.date_of_donation|date:"d M Y" }}</td>
+                  <td>{{ donation.donor.username }}</td>
+                  <td>{{ donation.location }}</td>
+                  {% if donation.is_verified %}
+                  <td>
+                    <span class="badge bg-success text-uppercase"
+                      >Verified</span
+                    >
+                  </td>
+                  {% else %}
+                  <td>
+                    <span class="badge bg-warning text-dark text-uppercase"
+                      >Pending Verification</span
+                    >
+                  </td>
+                  {% endif %}
+                  <td>
+                    {% if not donation.is_verified %}
+                    <a
+                      href="{% url 'reject-donation' donation.id %}"
+                      class="btn btn-sm btn-danger"
+                      >Reject</a
+                    >
+                    <a
+                      href="{% url 'verify-donation' donation.id %}"
+                      class="btn btn-sm btn-success"
+                      >Verify</a
+                    >
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-center text-muted my-4">
+            No confirmation requests pending.
+          </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Health Resources -->
+      <div class="card health-resources">
+        <div class="card-header">
+          <i class="fas fa-heartbeat me-2"></i> Health Resources & Tips
+        </div>
+        <div class="card-body">
+          <h5 class="mb-4">Important Information About Blood Transfusions</h5>
+          <ul>
+            <li>
+              <i class="fas fa-info-circle"></i> Understanding blood types and
+              compatibility.
+            </li>
+            <li>
+              <i class="fas fa-calendar-check"></i> Preparing for a blood
+              transfusion.
+            </li>
+            <li>
+              <i class="fas fa-stethoscope"></i> Post-transfusion care and
+              monitoring.
+            </li>
+            <li>
+              <i class="fas fa-shield-alt"></i> Safety measures and screening
+              processes.
+            </li>
+            <li>
+              <i class="fas fa-question-circle"></i> Common myths and facts
+              about receiving blood.
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>

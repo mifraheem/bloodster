@@ -11,7 +11,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    'jet',
+    "unfold", 
+    # 'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -111,3 +112,32 @@ EMAIL_HOST_PASSWORD = 'pyfp ctvm qnav uiva'
 
 
 OPENROUTER_API_KEY = "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"
+
+
+UNFOLD = {
+    "SITE_TITLE": "Bloodster Admin",
+    "SITE_HEADER": "Bloodster",
+    "SITE_URL": "/",
+    "SITE_ICON": {
+        "light": "/static/logo-light.svg",
+        "dark": "/static/logo-dark.svg",
+    },
+    "COLORS": {
+        "primary": {
+            "50": "239 246 255",
+            "100": "219 234 254",
+            "200": "191 219 254",
+            "300": "147 197 253",
+            "400": "96 165 250",
+            "500": "59 130 246",
+            "600": "37 99 235",
+            "700": "29 78 216",
+            "800": "30 64 175",
+            "900": "30 58 138",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": False,
+    },
+}

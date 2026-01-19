@@ -71,14 +71,28 @@ def recipt_dashboard(request):
 
     donations_to_confirm = BloodDonation.objects.filter(
         recipient=request.user, is_verified=False)
+    
+    # Stats
+    total_requests = blood_requests.count()
+    active_requests = blood_requests.filter(
+        status__in=["pending", "in_progress"]
+        )
+    completed_requests = blood_requests.filter(status="fulfilled").count()
+
+    has_active_request = active_requests.exists()
 
     context = {
-        'requests': blood_requests,
+    'requests': blood_requests,
+    'matching_donors': matching_donors,
+    'all_donors': all_donors,
+    'donations_confirmation': donations_to_confirm,
 
-        'matching_donors': matching_donors,
-        'all_donors': all_donors,
-        'donations_confirmation': donations_to_confirm
-    }
+    # NEW
+    'total_requests': total_requests,
+    'active_requests_count': active_requests.count(),
+    'completed_requests': completed_requests,
+    'has_active_request': has_active_request,
+}
 
     return render(request, 'db/recipient.html', context)
 

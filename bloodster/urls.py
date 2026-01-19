@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from website.controllers import basic_controller, user_controller, dashboards, bloodRequest, chat_controller
 from website.views import *
 urlpatterns = [
-    path('jet/', include('jet.urls', 'jet')),
+#     path('jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
 
     # basic urls
